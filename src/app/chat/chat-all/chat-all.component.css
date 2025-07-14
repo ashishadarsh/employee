@@ -1,0 +1,113 @@
+/* Chatbox Container */
+.chatbox-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh; /* Full height of the viewport */
+  width: 100vw;  /* Full width of the viewport */
+  margin: 0;
+  background-color: #f7f7f7;
+  position: relative; /* Ensure relative positioning for child elements */
+  overflow: hidden; /* Prevent scrolling for the entire container */
+}
+
+/* Chatbox Header */
+.chatbox-header {
+  background-color: #007bff;
+  color: white;
+  text-align: center;
+  padding: 15px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  flex-shrink: 0; /* Prevent the header from shrinking */
+}
+
+/* Chatbox Messages */
+.chatbox-messages {
+  flex: 1; /* Fill the available space */
+  overflow-y: auto; /* Enable scrolling for the messages */
+  padding: 15px;
+  margin-bottom: 50px;
+  background-color: #ffffff;
+  box-shadow: inset 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Individual Message */
+.chat-message {
+  margin-bottom: 15px;
+  padding: 10px;
+  border-radius: 10px;
+  background: #e9ecef;
+  word-wrap: break-word; /* Ensure long words wrap */
+}
+
+.chat-message.current-user .sender {
+  color: blue; /* Highlight sender name in green */
+  font-weight: bold; /* Make it stand out */
+}
+
+/* Sender and Timestamp */
+.chat-message .sender {
+  font-weight: bold;
+  margin-right: 10px;
+  color: #6b6c6d;
+}
+
+.chat-message .timestamp {
+  float: right;
+  font-size: 0.85em;
+  color: #6c757d;
+}
+
+/* Chatbox Input */
+.chatbox-input {
+  position: fixed; /* Fix the input area at the bottom */
+  bottom: 0;
+  left: 0;
+  width: 100%; /* Ensure it spans the full width */
+  display: flex;
+  padding: 10px;
+  border-top: 1px solid #dee2e6;
+  background-color: #f8f9fa;
+  box-sizing: border-box; /* Include padding and border in width calculation */
+}
+
+/* Input Field */
+.chatbox-input input {
+  flex: 1;
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ced4da;
+  border-radius: 5px;
+  margin-right: 10px;
+  box-sizing: border-box; /* Include padding and border in width calculation */
+}
+
+/* Send Button */
+.chatbox-input button {
+  padding: 10px 20px;
+  font-size: 1rem;
+  color: white;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.chatbox-input button:hover {
+  background-color: #0056b3;
+}
+
+@media (max-width: 768px) {
+  .chatbox-header {
+    font-size: 1.2rem;
+  }
+
+  .chatbox-input input {
+    font-size: 0.9rem;
+  }
+
+  .chatbox-input button {
+    font-size: 0.9rem;
+    padding: 8px 16px;
+  }
+}

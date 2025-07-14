@@ -1,0 +1,29 @@
+<div *ngIf="tasks">
+  <a [routerLink]= "['/tasks/add', '']" class="btn btn-primary">Add Task</a>
+</div>
+
+<div *ngIf="error" class="error">{{ error }}</div>
+@for (task of tasks; track $index) {
+  <!-- <div *ngIf="tasks" class="card w-75" style="margin-bottom: 20px; justify-content: center;">
+    <h5 class="card-header">{{task.status}}</h5>
+    <div class="card-body">
+      <h5 class="card-title">{{task.title}}</h5>
+      <p class="card-text">{{task.description}}</p>
+      <a [routerLink]= "['/tasks/add', task._id]" class="btn btn-primary">Open</a>
+    </div>
+  </div> -->
+  <div class="custom-card">
+    <div class="card-header">
+      <h5>{{ task.status }}</h5>
+    </div>
+    <div class="card-body">
+      <h4 class="card-title">{{ task.title }}</h4>
+      <p class="card-text">{{ task.description }}</p>
+      <a [routerLink]="['/tasks/add', task._id]" class="btn btn-success">Open</a>
+    </div>
+  </div>
+
+  <router-outlet></router-outlet>
+
+}
+

@@ -1,0 +1,139 @@
+/* General Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Body Styling */
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f4f7fc;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  color: #333;
+}
+
+/* Loading & Error State Styling */
+.loading,
+.error {
+  color: #ff0000;
+  font-size: 18px;
+  text-align: center;
+  padding: 20px;
+}
+
+.error {
+  color: red;
+}
+
+/* Profile Container */
+.profile-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.team-data-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px; /* Space between cards */
+  padding: 20px;
+}
+
+/* Smaller teamData cards */
+.profile-card.team-card {
+  /* width: 100%; Allow cards to adapt to grid layout */
+  padding: 15px;
+  font-size: 14px;
+  /* min-width: 200px; */
+}
+
+/* Profile Card */
+.profile-card {
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 350px;
+  padding: 20px;
+  text-align: center;
+  border: 1px solid #e1e1e1;
+  transition: transform 0.2s;
+}
+
+.profile-card:hover {
+  transform: scale(1.05); /* Hover effect for profile card */
+}
+
+/* Profile Header */
+.profile-header {
+  margin-bottom: 20px;
+}
+
+.profile-name {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+}
+
+.profile-designation {
+  font-size: 16px;
+  color: #777;
+  margin-top: 5px;
+  font-style: italic;
+}
+
+/* Profile Info */
+.profile-info {
+  text-align: left;
+}
+
+.profile-item {
+  margin-bottom: 12px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.profile-label {
+  font-weight: 600;
+  color: #555;
+  margin-right: 8px;
+}
+
+.profile-detail {
+  font-weight: 400;
+  color: #333;
+  display: block;
+  word-break: break-word;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+  .profile-card {
+    width: 100%;
+    padding: 15px;
+  }
+
+  .profile-name {
+    font-size: 20px;
+  }
+
+  .profile-designation {
+    font-size: 14px;
+  }
+
+  .profile-label,
+  .profile-detail {
+    font-size: 14px;
+  }
+}
+
+/* Miscellaneous */
+h2, p {
+  margin: 0;
+}

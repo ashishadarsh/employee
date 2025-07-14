@@ -1,0 +1,24 @@
+<form (ngSubmit)="onAddingTask()" [formGroup]="addTaskForm">
+  <div class="form-floating">
+    <input
+      type="text"
+      class="form-control"
+      id="floatingInput"
+      placeholder="Enter Title"
+      formControlName="title"
+    />
+    <label for="floatingInput">Title</label>
+  </div>
+  <div class="form-floating">
+    <textarea
+      class="form-control"
+      placeholder="Enter Description"
+      formControlName="description"
+      id="floatingTextarea2"
+      style="height: 100px"
+    ></textarea>
+    <label for="floatingTextarea2">Description</label>
+  </div>
+
+  <button type="submit" class="btn btn-primary">Add</button>
+</form>

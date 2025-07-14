@@ -1,0 +1,139 @@
+import { inject, Injectable } from '@angular/core';
+import { BehaviorSubject, Observable, from } from 'rxjs';
+import { getEmployee, getEmployeeTasks, getEmployeesByTeam, getMessages, messgeAddedSubscription } from './graphql/queries';
+import { ApolloClient } from '@apollo/client/core';
+import { FormArray } from '@angular/forms';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class DataService {
+  private apolloClient = inject(ApolloClient);
+
+  public employeeIdSubject = new BehaviorSubject<string | undefined | null>(undefined);
+  public employee$ = new BehaviorSubject<any>(null);
+  public employeesByTeam$ = new BehaviorSubject<any>(null);
+  public tasks$ = new BehaviorSubject<any>(null);
+  public messages$ = new BehaviorSubject<any[]>([]);
+
+  constructor() {
+  }
+
+
+  getMessages(): Observable<any> {
+    const employeeId = this.employeeIdSubject.value;
+    if (!employeeId) {
+      return new Observable();
+    }
+    return from(getMessages());
+  }
+
+  // Fetch employee data as Observable
+  getEmployeeData(): Observable<any> {
+    const employeeId = this.employeeIdSubject.value;
+    if (!employeeId) {
+      return new Observable();
+    }
+    return from(getEmployee(employeeId));
+  }
+
+  getEmployeesByTeam(): Observable<any> {
+    const employee = this.employee$.value;
+    if (!employee) {
+      return new Observable();
+    }
+    return from(getEmployeesByTeam(employee.team));
+  }
+
+  // Fetch employee tasks as Observable
+  getEmployeeAllTasks(): Observable<any> {
+    const employeeId = this.employeeIdSubject.value;
+    if (!employeeId) {
+      return new Observable();
+    }
+    return from(getEmployeeTasks(employeeId));
+  }
+
+  // get employeeId$(): Observable<string | undefined> {
+  //   return this.employeeIdSubject.asObservable();
+  // }
+
+  // Set employee ID and notify subscribers
+  setEmployeeId(id: string | undefined) {
+    this.employeeIdSubject.next(id);
+  }
+
+  // Fetch and store data
+  fetchAndStoreEmployeeData() {
+    this.getEmployeeData().subscribe(
+      (data) => {
+        this.employee$.next(data);
+        this.getEmployeesByTeam().subscribe(
+          (teamData) => {
+            this.employeesByTeam$.next(teamData)
+          },
+          (error) => console.error('Error fetching employees by team:', error)
+        );
+      },
+      (error) => {
+        console.error('Error fetching employee data:', error);
+      }
+    );
+  }
+
+
+  fetchAndStoreEmployeeTasks() {
+    this.getEmployeeAllTasks().subscribe(
+      (data) => {
+        this.tasks$.next(data);
+      },
+      (error) => {
+        console.error('Error fetching tasks data:', error);
+      }
+    );
+  }
+
+  // fetchAndStoreMessages() {
+  //   this.getMessages().subscribe(
+  //     (data) => {
+  //       this.messages$.next(data);
+  //     },
+  //     (error) => {
+  //       console.error('Error fetching messages:', error);
+  //     }
+  //   );
+  // }
+
+  fetchAndStoreMessages() {
+    // Fetch existing messages
+    this.getMessages().subscribe(
+      (data) => {
+        this.messages$.next(data);
+        // Subscribe to new messages
+        this.subscribeToNewMessages();
+      },
+      (error) => {
+        console.error('Error fetching messages:', error);
+      }
+    );
+  }
+
+  subscribeToNewMessages() {
+    this.apolloClient
+      .subscribe({
+        query: messgeAddedSubscription,
+      })
+      .subscribe({
+        next: ({ data }) => {
+          const newMessage = data?.message;
+          if (newMessage) {
+            console.log({newMessage});
+
+            this.messages$.next([...(this.messages$.value || []), newMessage]);
+          }
+        },
+        error: (error) => console.error('Subscription error:', error),
+      });
+  }
+
+}
