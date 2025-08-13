@@ -1,1 +1,37 @@
-<p>task works!</p>
+<div *ngIf="!loading && task" class="task-card">
+  <div class="task-header">
+    <h2>{{ task.title }}</h2>
+    <span class="status-badge" >
+      {{ task.status }}
+    </span>
+  </div>
+
+  <div class="task-meta">
+    <div class="meta-item">
+      <span class="meta-label">Assigned Date:</span>
+      <span class="meta-value">{{ task.assignedDate | date: 'mediumDate' }}</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Assigned By:</span>
+      <span class="meta-value">{{ empName }}</span>
+    </div>
+    <!-- <div class="meta-item">
+      <span class="meta-label">Employee ID:</span>
+      <span class="meta-value">{{ task.empId }}</span>
+    </div> -->
+  </div>
+
+  <div class="task-body">
+    <h4>Description</h4>
+    <p>{{ task.description }}</p>
+  </div>
+
+  <div class="task-actions">
+    <button class="btn primary" [routerLink]="['/tasks/edit', task._id]" routerLinkActive="router-link-active" >Edit Task</button>
+    <button class="btn secondary" routerLink="/tasks">Back to Tasks</button>
+  </div>
+</div>
+
+<div *ngIf="loading" class="loading">Loading task details...</div>
+<div *ngIf="error" class="error">{{ error }}</div>
+

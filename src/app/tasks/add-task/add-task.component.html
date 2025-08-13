@@ -1,24 +1,72 @@
-<form (ngSubmit)="onAddingTask()" [formGroup]="addTaskForm">
+<div class="modal-header">
+  <h3 class="modal-title">{{ title }}</h3>
+  <button type="button" class="btn-close" (click)="closePopup()" style="margin-bottom: 12px;">❌</button>
+</div>
+
+<form (ngSubmit)="onAddingTask()" [formGroup]="addTaskForm" class="modern-form">
+  <!-- Title -->
   <div class="form-floating">
     <input
       type="text"
       class="form-control"
-      id="floatingInput"
+      id="titleInput"
       placeholder="Enter Title"
       formControlName="title"
     />
-    <label for="floatingInput">Title</label>
+    <label for="titleInput">Title</label>
   </div>
+
+  <!-- Description -->
   <div class="form-floating">
     <textarea
       class="form-control"
       placeholder="Enter Description"
       formControlName="description"
-      id="floatingTextarea2"
-      style="height: 100px"
+      id="descriptionTextarea"
+      style="height: 120px"
     ></textarea>
-    <label for="floatingTextarea2">Description</label>
+    <label for="descriptionTextarea">Description</label>
   </div>
 
-  <button type="submit" class="btn btn-primary">Add</button>
+  <!-- Status & Assign -->
+  <div class="form-row">
+    <div class="form-select-group">
+      <label for="status">Status</label>
+      <select id="status" formControlName="status">
+        @for (status of statusOptions; track $index) {
+          <option [value]="status.label">{{ status.label }}</option>
+        }
+      </select>
+    </div>
+
+    <div class="form-select-group">
+      <label for="teamMember">Assign To</label>
+      <select id="teamMember" formControlName="empId">
+        @for (teamMemberData of teamData; track $index) {
+          <option [value]="teamMemberData._id">
+            {{ teamMemberData.firstName }}
+          </option>
+        }
+      </select>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-select-group">
+      <label for="completionDate">Completion Date</label>
+      <input
+        type="date"
+        id="completionDate"
+        formControlName="completionDate"
+      />
+    </div>
+  </div>
+
+  <!-- Buttons -->
+  <div class="modal-buttons">
+    <button type="button" class="btn btn-secondary" (click)="closePopup()">
+      Cancel
+    </button>
+    <button type="submit" class="btn btn-success">Save</button>
+  </div>
 </form>

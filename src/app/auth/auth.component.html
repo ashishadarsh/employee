@@ -22,6 +22,7 @@
                 required
                 email
                 aria-describedby="emailHelp"
+                #email = "ngModel"
               />
               <div *ngIf="authForm.controls['email']?.invalid && authForm.controls['email']?.touched" class="text-danger">
                 Please enter a valid email.

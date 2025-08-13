@@ -146,6 +146,29 @@ export async function getEmployeesByTeam(team) {
   return data.getEmployeesByTeam;
 }
 
+export async function createNewTask() {
+  const mutation = gql`
+    mutation createTaskForEmployee($text: String!) {
+      createTaskForEmployee(text: $text) {
+        _id
+        empId
+        assigneeId
+        title
+        description
+        status
+      }
+    }
+  `;
+
+  const { data } = await apolloClient.mutate({
+    mutation,
+    variables: { text: newMsg },
+  });
+  console.log({ data });
+
+  return data.addMessage;
+}
+
 export async function addMessage(newMsg) {
   const mutation = gql`
     mutation addMessage($text: String!) {

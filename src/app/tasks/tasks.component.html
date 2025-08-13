@@ -1,29 +1,62 @@
-<div *ngIf="tasks">
-  <a [routerLink]= "['/tasks/add', '']" class="btn btn-primary">Add Task</a>
-</div>
+<div class="tasks-container" *ngIf="!loading">
 
-<div *ngIf="error" class="error">{{ error }}</div>
-@for (task of tasks; track $index) {
-  <!-- <div *ngIf="tasks" class="card w-75" style="margin-bottom: 20px; justify-content: center;">
-    <h5 class="card-header">{{task.status}}</h5>
-    <div class="card-body">
-      <h5 class="card-title">{{task.title}}</h5>
-      <p class="card-text">{{task.description}}</p>
-      <a [routerLink]= "['/tasks/add', task._id]" class="btn btn-primary">Open</a>
-    </div>
-  </div> -->
-  <div class="custom-card">
-    <div class="card-header">
-      <h5>{{ task.status }}</h5>
-    </div>
-    <div class="card-body">
-      <h4 class="card-title">{{ task.title }}</h4>
-      <p class="card-text">{{ task.description }}</p>
-      <a [routerLink]="['/tasks/add', task._id]" class="btn btn-success">Open</a>
-    </div>
+  <!-- Header -->
+  <div class="tasks-header">
+    <h2>Tasks</h2>
+    <a [routerLink]="['/tasks/add']" class="btn btn-primary">+ Add Task</a>
   </div>
 
-  <router-outlet></router-outlet>
+  <!-- Filter -->
+  <div class="filter-bar" *ngIf="tasks?.length">
+    <label for="statusFilter">Status:</label>
+    <select id="statusFilter" [(ngModel)]="selectedStatus">
+      <option value="">All</option>
+      <option *ngFor="let status of statusOptions" [value]="status">{{ status }}</option>
+    </select>
+  </div>
 
-}
+  <!-- Table -->
+  <div class="table-wrapper">
+    <table class="modern-table" *ngIf="filteredTasks.length > 0; else noData">
+      <thead>
+        <tr>
+          <th>Status</th>
+          <th>Title</th>
+          <th>Due Date</th>
+          <th class="action-col">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let task of filteredTasks">
+          <td> <a style="text-decoration: none; font-weight: 1000;" [routerLink]="['/tasks', task._id]">{{ task.title }}</a></td>
+          <td>
+            <span class="status-badge" [ngClass]="getStatusClass(task.status)">
+              {{ task.status }}
+            </span>
+          </td>
+          <td>{{ task.dueDate | date:'mediumDate' }}</td>
+          <td>
+            <a [routerLink]="['/tasks/edit', task._id]" class="btn btn-success btn-sm">Edit</a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 
+  <!-- No Data -->
+  <ng-template #noData>
+    <p class="no-tasks">No tasks found for selected status.</p>
+  </ng-template>
+
+</div>
+
+<!-- Loading -->
+<div *ngIf="loading" class="loading">Loading tasks...</div>
+<div *ngIf="error" class="error">{{ error }}</div>
+
+<!-- Child Route Modal -->
+<div class="modal-wrapper" *ngIf="childRouteActive">
+  <div class="modal-content">
+    <router-outlet></router-outlet>
+  </div>
+</div>

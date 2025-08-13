@@ -37,6 +37,14 @@ export class DataService {
     return from(getEmployee(employeeId));
   }
 
+  getTaskAssigneeData(employeeId): Observable<any> {
+    // const employeeId = this.employeeIdSubject.value;
+    if (!employeeId) {
+      return new Observable();
+    }
+    return from(getEmployee(employeeId));
+  }
+
   getEmployeesByTeam(): Observable<any> {
     const employee = this.employee$.value;
     if (!employee) {

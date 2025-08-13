@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { afterNextRender, Component, DestroyRef, inject, viewChild } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { AuthService } from '../auth.service';
 import { CommonModule } from '@angular/common';
 import { DataService } from '../data.service';
 import { Router } from '@angular/router';
 import { LoadingSpinner } from '../shared/loading-spinner/loading-spinner';
+import { debounceTime } from 'rxjs';
 
 @Component({
   selector: 'app-auth',
@@ -18,6 +19,10 @@ export class AuthComponent {
   public loading: boolean = false;
   public error: string = '';
   dateOfBirth!: Date;
+
+  // ViewChild to access the form in the template
+  // private form = viewChild<NgForm>('authForm'); // Reference to the form from html 'authForm'
+  // private destroyRef = inject(DestroyRef);
 
   selectedTeam: string = '';
   designations: string[] = [];
@@ -76,7 +81,27 @@ export class AuthComponent {
     { id: '2', name: 'Others' }
   ];
 
-  constructor(private authService: AuthService, private dataService: DataService, private router: Router){}
+  constructor(private authService: AuthService, private dataService: DataService, private router: Router){
+    // afterNextRender(() => {
+    //   setTimeout(() => {
+    //     this.form()?.setValue({
+    //       email: 'sdch@sdch.com',
+    //       passowrd: ''
+    //     })
+
+    //     this.form()?.controls['email'].setValue('sdch@sdch.com');
+    //   },1)
+
+    //   // Initialize the form after the view is rendered
+    //   if (this.form()) {
+    //     const subscription = this.form()?.valueChanges?.pipe(debounceTime(500)).subscribe(value => {
+    //       console.log('Form value changed:', value);
+
+    //     });
+    //     this.destroyRef.onDestroy(() => subscription?.unsubscribe());
+    //   }
+    // })
+  }
 
   onSwitchMode() {
     this.isLoginMode = !this.isLoginMode;
@@ -104,6 +129,7 @@ export class AuthComponent {
           this.dataService.setEmployeeId(data?.id);
           this.loading = false;
         }
+        this.router.navigate(['/tasks']);
       })
     }
     else if(!this.isLoginMode) {
