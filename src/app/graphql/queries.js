@@ -149,8 +149,6 @@ export async function getEmployeesByTeam(team) {
 }
 
 export async function createNewTask({_id, title, description, empId, completionDate, status, type}) {
-  console.log({_id, title, description, empId, completionDate, status, type});
-
   const mutation = gql`
     mutation createTask($input: createTaskInput!) {
       createTaskForEmployee(input: $input) {
@@ -176,8 +174,6 @@ export async function createNewTask({_id, title, description, empId, completionD
     type
   } },
   });
-  console.log({ data });
-
   return data.addMessage;
 }
 
@@ -198,8 +194,6 @@ export async function addMessage(newMsg) {
     mutation,
     variables: { text: newMsg },
   });
-  console.log({ data });
-
   return data.addMessage;
 }
 
