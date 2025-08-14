@@ -104,11 +104,13 @@ export async function getEmployeeTasks(empId) {
       tasksForEmployee(id: $empId) {
         _id
         assignedDate
+        completionDate
         empId
         status
         assigneeId
         title
         description
+        type
       }
     }
   `;

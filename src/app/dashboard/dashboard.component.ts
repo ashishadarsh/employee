@@ -60,9 +60,6 @@ export class DashboardComponent implements OnInit {
     this.dataService.tasks$.subscribe(
       (data: any[]) => {
         this.tasks = data;
-        console.log({ data });
-
-
         const groupedData = this.groupTasksByStatus(data);
 
         this.chartOptions = {

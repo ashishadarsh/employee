@@ -1,58 +1,130 @@
-<div class="tasks-container" *ngIf="!loading">
 
-  <!-- Header -->
-  <div class="tasks-header">
-    <h2>Tasks</h2>
-    <a [routerLink]="['/tasks/add']" class="btn btn-primary">+ Add Task</a>
+<p-table
+    #dt1
+    [value]="tasks"
+    [globalFilterFields]="['name', 'country.name', 'representative.name', 'status']"
+    selectionMode="single"
+    dataKey="_id"
+    [tableStyle]="{ 'min-width': '50rem' }"
+    [rows]="10"
+    [paginator]="true"
+    [rowsPerPageOptions]="[5,10,20]"
+    stateStorage="session"
+    stateKey="statedemo-session"
+>
+<ng-template pTemplate="caption">
+  <div style="display: flex; align-items: center; gap: 1rem;">
+    <!-- Filter field takes remaining space -->
+    <p-iconfield iconPosition="left" style="flex: 1;">
+      <p-inputicon>
+        <i class="pi pi-search"></i>
+      </p-inputicon>
+      <input
+        pInputText
+        type="text"
+        placeholder="Global Search"
+      />
+    </p-iconfield>
+
+    <!-- Button stays on the right -->
+    <p-button
+      label="Add Task"
+      icon="pi pi-plus"
+      variant="outlined"
+      [raised]="true"
+      severity="info"
+      [routerLink]="['/tasks/add']"
+    ></p-button>
   </div>
+</ng-template>
 
-  <!-- Filter -->
-  <div class="filter-bar" *ngIf="tasks?.length">
-    <label for="statusFilter">Status:</label>
-    <select id="statusFilter" [(ngModel)]="selectedStatus">
-      <option value="">All</option>
-      <option *ngFor="let status of statusOptions" [value]="status">{{ status }}</option>
-    </select>
-  </div>
-
-  <!-- Table -->
-  <div class="table-wrapper">
-    <table class="modern-table" *ngIf="filteredTasks.length > 0; else noData">
-      <thead>
+    <ng-template #header>
         <tr>
-          <th>Status</th>
-          <th>Title</th>
-          <th>Due Date</th>
-          <th class="action-col">Action</th>
+            <th pSortableColumn="name" style="width:25%">
+                <div class="flex items-center gap-2">
+                    Title
+                    <p-sortIcon field="name" />
+                </div>
+            </th>
+            <th pSortableColumn="type" style="width:25%">
+              <div class="flex items-center gap-2">
+                  Type
+                  <p-sortIcon field="type" />
+              </div>
+          </th>
+            <th pSortableColumn="type" style="width:25%">
+              <div class="flex items-center gap-2">
+                  Status
+                  <p-sortIcon field="type" />
+              </div>
+          </th>
+            <!-- <th pSortableColumn="country.name" style="width:25%">
+                <div class="flex items-center gap-2">
+                    Description
+                    <p-sortIcon field="country.name" />
+                </div>
+            </th> -->
+            <th pSortableColumn="representative.name" style="width:25%">
+                <div class="flex items-center gap-2">
+                    Completion Date
+                    <p-sortIcon field="representative.name" />
+                </div>
+            </th>
+            <th pSortableColumn="country.name" style="width:25%">
+              <div class="flex items-center gap-2">
+                  Assigned Date
+                  <p-sortIcon field="country.name" />
+              </div>
+          </th>
         </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let task of filteredTasks">
-          <td> <a style="text-decoration: none; font-weight: 1000;" [routerLink]="['/tasks', task._id]">{{ task.title }}</a></td>
+    </ng-template>
+    <ng-template #body let-task>
+        <tr [pSelectableRow]="task">
           <td>
-            <span class="status-badge" [ngClass]="getStatusClass(task.status)">
-              {{ task.status }}
-            </span>
+            <a [routerLink]="['/tasks', task._id]" (click)="$event.stopPropagation()" style="cursor: pointer; text-decoration: none; color: forestgreen; font: caption;">
+              {{ task.title }}
+            </a>
           </td>
-          <td>{{ task.dueDate | date:'mediumDate' }}</td>
           <td>
-            <a [routerLink]="['/tasks/edit', task._id]" class="btn btn-success btn-sm">Edit</a>
+            <p-tag [value]="task.type" [severity]="getSeverityType(task.type)" />
+        </td>
+            <td>
+              <p-tag [value]="task.status" [severity]="getSeverity(task.status)" />
           </td>
+            <!-- <td>
+              {{ task.description }}
+            </td> -->
+            <td>
+                {{ task.completionDate }}
+            </td>
+            <td>
+                {{ task.assignedDate }}
+            </td>
+
         </tr>
-      </tbody>
-    </table>
-  </div>
-
-  <!-- No Data -->
-  <ng-template #noData>
-    <p class="no-tasks">No tasks found for selected status.</p>
-  </ng-template>
-
-</div>
-
-<!-- Loading -->
-<div *ngIf="loading" class="loading">Loading tasks...</div>
-<div *ngIf="error" class="error">{{ error }}</div>
+    </ng-template>
+    <!-- <ng-template #body let-task>
+      <tr [pSelectableRow]="task">
+          <td>
+              {{ task.title }}
+          </td>
+          <td>
+              <p-tag [value]="task.status" [severity]="getSeverity(task.status)" />
+          </td>
+          <td>
+              {{ task.completionDate }}
+          </td>
+          <td>
+              {{ task.assignedDate }}
+          </td>
+      </tr>
+  </ng-template> -->
+    <ng-template emptymessage>
+        <tr>
+            <td colspan="4">No customers found.</td>
+        </tr>
+    </ng-template>
+</p-table>
 
 <!-- Child Route Modal -->
 <div class="modal-wrapper" *ngIf="childRouteActive">

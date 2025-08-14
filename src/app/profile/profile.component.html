@@ -1,69 +1,77 @@
 <!-- Loading state -->
-<div *ngIf="loading">Loading...</div>
-
-<!-- Error state -->
-<div *ngIf="error" class="error">{{ error }}</div>
-
-<!-- Employee Data -->
-<div *ngIf="emp" class="profile-container">
-  <div class="profile-card">
-    <div class="profile-header">
-      <h2 class="profile-name">{{ emp.firstName }} {{ emp.lastName }}</h2>
-      <p class="profile-designation">{{ emp.designation }}</p>
-    </div>
-    <div class="profile-info">
-      <div class="profile-item">
-        <span class="profile-label">Email:</span>
-        <span class="profile-detail">{{ emp.email }}</span>
-      </div>
-      <div class="profile-item">
-        <span class="profile-label">Mobile No:</span>
-        <span class="profile-detail">{{ emp.mobileNo }}</span>
-      </div>
-      <div class="profile-item">
-        <span class="profile-label">Date of Birth:</span>
-        <span class="profile-detail">{{ emp.dob }}</span>
-      </div>
-      <div class="profile-item">
-        <span class="profile-label">Gender:</span>
-        <span class="profile-detail">{{ emp.gender }}</span>
-      </div>
-    </div>
-  </div>
+<div *ngIf="loading" class="loading-state">
+  <div class="spinner"></div>
+  <p>Loading profile...</p>
 </div>
 
-<div *ngIf="emp" class="team-data-container">
-  <div *ngFor="let item of teamData" class="profile-container">
-    <div class="profile-card team-card">
+<!-- Error state -->
+<div *ngIf="error" class="error-state">
+  {{ error }}
+</div>
+
+<!-- Employee Data -->
+<div *ngIf="emp" class="profile-page">
+
+  <!-- Your Profile -->
+  <div class="profile-section">
+    <div class="profile-card main-card">
+      <div class="avatar">{{ emp.firstName.charAt(0) }}{{ emp.lastName.charAt(0) }}</div>
       <div class="profile-header">
-        <h2 class="profile-name">{{ item.firstName }} {{ item.lastName }}</h2>
-        <p class="profile-designation">{{ item.designation }}</p>
+        <h2 class="profile-name">{{ emp.firstName }} {{ emp.lastName }}</h2>
+        <p class="profile-designation">{{ emp.designation }}</p>
       </div>
       <div class="profile-info">
         <div class="profile-item">
-          <span class="profile-label">Email:</span>
-          <span class="profile-detail">{{ item.email }}</span>
+          <span>Email:</span>
+          <span>{{ emp.email }}</span>
         </div>
         <div class="profile-item">
-          <span class="profile-label">Mobile No:</span>
-          <span class="profile-detail">{{ item.mobileNo }}</span>
+          <span>Mobile No:</span>
+          <span>{{ emp.mobileNo }}</span>
         </div>
         <div class="profile-item">
-          <span class="profile-label">Date of Birth:</span>
-          <span class="profile-detail">{{ item.dob }}</span>
+          <span>Date of Birth:</span>
+          <span>{{ emp.dob }}</span>
         </div>
         <div class="profile-item">
-          <span class="profile-label">Gender:</span>
-          <span class="profile-detail">{{ item.gender }}</span>
+          <span>Gender:</span>
+          <span>{{ emp.gender }}</span>
         </div>
       </div>
     </div>
   </div>
+
+  <!-- Team Profiles -->
+  <!-- My Team Section -->
+<div class="profile-section">
+  <h1 class="section-title">
+    <span class="section-icon">👥</span>
+  </h1>
+
+
+  <div class="team-list">
+    <div class="team-row header">
+      <div class="col-name">Name</div>
+      <div class="col-role">Designation</div>
+      <div class="col-email">Email</div>
+      <div class="col-phone">Mobile</div>
+      <div class="col-dob">DOB</div>
+      <div class="col-gender">Gender</div>
+    </div>
+
+    <div *ngFor="let item of teamData" class="team-row">
+      <div class="col-name">
+        <div class="avatar-small">{{ item.firstName.charAt(0) }}{{ item.lastName.charAt(0) }}</div>
+        <span>{{ item.firstName }} {{ item.lastName }}</span>
+      </div>
+      <div class="col-role">{{ item.designation }}</div>
+      <div class="col-email">{{ item.email }}</div>
+      <div class="col-phone">{{ item.mobileNo }}</div>
+      <div class="col-dob">{{ item.dob }}</div>
+      <div class="col-gender">{{ item.gender }}</div>
+    </div>
+  </div>
 </div>
 
-<!-- <div *ngFor="let item of teamData">
-  <div class="profile-item">
-    <span class="profile-label">Email:</span>
-    <span class="profile-detail">{{ item.email }}</span>
-  </div>
-</div> -->
+
+</div>
