@@ -81,10 +81,16 @@
     <ng-template #body let-task>
         <tr [pSelectableRow]="task">
           <td>
-            <a [routerLink]="['/tasks', task._id]" (click)="$event.stopPropagation()" style="cursor: pointer; text-decoration: none; color: forestgreen; font: caption;">
+            <a
+              [routerLink]="['/tasks', task._id]"
+              (click)="$event.stopPropagation()"
+              style="cursor: pointer; text-decoration: none; color: forestgreen; font: caption;"
+              [title]="task.originalTitle || task.title"
+            >
               {{ task.title }}
             </a>
           </td>
+
           <td>
             <p-tag [value]="task.type" [severity]="getSeverityType(task.type)" />
         </td>

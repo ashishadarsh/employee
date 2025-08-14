@@ -14,6 +14,7 @@ import { Button } from 'primeng/button';
 export class TaskComponent implements OnInit{
   taskId = input.required<string>();
   public task: any;
+  public title: string = '';
   public empName: string = '';
   public assigneeId: string = '';
   public tasks: any = [];

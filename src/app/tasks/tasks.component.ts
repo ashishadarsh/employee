@@ -37,18 +37,19 @@ export class TasksComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchTasks();
-    setTimeout(() => {
-      console.log(this.tasks);
-
-    }, 1)
   }
 
   fetchTasks() {
     this.dataService.tasks$.subscribe(
       (data: any[]) => {
         this.tasks = [...data];
-        console.log('Fetched tasks:', this.tasks);
-
+        this.tasks = this.tasks?.map((task: any) => {
+          return {
+            ...task,
+            originalTitle: task.title,
+            title: this.truncateString(task.title)
+          };
+        });
         this.statusOptions = [...new Set(data.map(task => task.status))];
         this.loading = false;
       },
@@ -58,6 +59,11 @@ export class TasksComponent implements OnInit {
         this.loading = false;
       }
     );
+  }
+
+  truncateString(str) {
+    if (typeof str !== 'string') return '';
+    return str.length > 30 ? str.slice(0, 30) + '...' : str;
   }
 
   getStatusClass(status: string): string {
