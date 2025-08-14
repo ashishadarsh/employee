@@ -126,3 +126,84 @@
   text-align: center;
   padding: 10px;
 }
+
+
+
+.task-header-modern {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.task-header-modern h2 {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 600;
+}
+
+.task-badges {
+  display: flex;
+  align-items: center;
+}
+
+.task-meta-modern {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  margin: 1.5rem 0;
+  gap: 1rem;
+}
+
+.meta-label {
+  font-weight: 500;
+  color: #666;
+}
+
+.meta-value {
+  font-weight: 600;
+}
+
+.task-body-modern {
+  margin-bottom: 1.5rem;
+}
+
+.task-body-modern h4 {
+  margin-bottom: 0.5rem;
+}
+
+.task-actions-modern {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.type {
+  margin-right: 5px;
+}
+
+.task-card-modern {
+  display: flex;
+  flex-direction: column;
+  height: 650px; /* adjust as needed */
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 16px;
+  background: #fff;
+  position: relative;
+}
+
+/* Make description scrollable */
+.task-body-modern.scrollable {
+  overflow-y: auto;
+  flex: 1; /* take all available space */
+  margin-bottom: 16px; /* space for fixed buttons */
+}
+
+/* Fix buttons at bottom */
+.task-actions-modern.fixed-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  position: sticky;
+  bottom: 0;
+  background: #fff;
+  padding-top: 8px;
+}

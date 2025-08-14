@@ -1,72 +1,78 @@
-<div class="modal-header">
-  <h3 class="modal-title">{{ title }}</h3>
-  <button type="button" class="btn-close" (click)="closePopup()" style="margin-bottom: 12px;">❌</button>
+<div class="modern-modal">
+  <div class="modal-header">
+    <h3 class="modal-title">{{ title }}</h3>
+    <button type="button" class="btn-close" (click)="closePopup()">❌</button>
+  </div>
+
+  <form (ngSubmit)="onAddingTask()" [formGroup]="addTaskForm" class="modern-form">
+    <!-- Scrollable Content -->
+    <div class="form-scrollable">
+      <!-- Title -->
+      <div class="form-floating">
+        <input
+          type="text"
+          class="form-control"
+          id="titleInput"
+          placeholder="Enter Title"
+          formControlName="title"
+        />
+        <label for="titleInput">Title</label>
+      </div>
+
+      <!-- Description -->
+      <div class="form-floating description-container">
+        <textarea
+          class="form-control scrollable-textarea"
+          placeholder="Enter Description"
+          formControlName="description"
+          id="descriptionTextarea"
+        ></textarea>
+        <label for="descriptionTextarea">Description</label>
+      </div>
+
+      <!-- Status & Assign -->
+      <div class="form-row">
+        <div class="form-select-group">
+          <label for="status">Status</label>
+          <select id="status" formControlName="status">
+            @for (status of statusOptions; track $index) {
+              <option [value]="status.label">{{ status.label }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="form-select-group">
+          <label for="teamMember">Assign To</label>
+          <select id="teamMember" formControlName="empId">
+            @for (teamMemberData of teamData; track $index) {
+              <option [value]="teamMemberData._id">{{ teamMemberData.firstName }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <!-- Task Type & Completion Date -->
+      <div class="form-row">
+        <div class="form-select-group">
+          <label for="taskType">Task Type</label>
+          <select id="taskType" formControlName="type">
+            @for (type of tasksType; track $index) {
+              <option [value]="type.label">{{ type.label }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="form-select-group">
+          <label for="completionDate">Completion Date</label>
+          <input type="date" id="completionDate" formControlName="completionDate" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Fixed Buttons -->
+    <div class="modal-buttons fixed-buttons">
+      <button type="button" class="btn btn-secondary" (click)="closePopup()">Cancel</button>
+      <button type="submit" class="btn btn-success">Save</button>
+    </div>
+  </form>
 </div>
-
-<form (ngSubmit)="onAddingTask()" [formGroup]="addTaskForm" class="modern-form">
-  <!-- Title -->
-  <div class="form-floating">
-    <input
-      type="text"
-      class="form-control"
-      id="titleInput"
-      placeholder="Enter Title"
-      formControlName="title"
-    />
-    <label for="titleInput">Title</label>
-  </div>
-
-  <!-- Description -->
-  <div class="form-floating">
-    <textarea
-      class="form-control"
-      placeholder="Enter Description"
-      formControlName="description"
-      id="descriptionTextarea"
-      style="height: 120px"
-    ></textarea>
-    <label for="descriptionTextarea">Description</label>
-  </div>
-
-  <!-- Status & Assign -->
-  <div class="form-row">
-    <div class="form-select-group">
-      <label for="status">Status</label>
-      <select id="status" formControlName="status">
-        @for (status of statusOptions; track $index) {
-          <option [value]="status.label">{{ status.label }}</option>
-        }
-      </select>
-    </div>
-
-    <div class="form-select-group">
-      <label for="teamMember">Assign To</label>
-      <select id="teamMember" formControlName="empId">
-        @for (teamMemberData of teamData; track $index) {
-          <option [value]="teamMemberData._id">
-            {{ teamMemberData.firstName }}
-          </option>
-        }
-      </select>
-    </div>
-  </div>
-
-  <div class="form-row">
-    <div class="form-select-group">
-      <label for="completionDate">Completion Date</label>
-      <input
-        type="date"
-        id="completionDate"
-        formControlName="completionDate"
-      />
-    </div>
-  </div>
-
-  <!-- Buttons -->
-  <div class="modal-buttons">
-    <button type="button" class="btn btn-secondary" (click)="closePopup()">
-      Cancel
-    </button>
-    <button type="submit" class="btn btn-success">Save</button>
-  </div>
-</form>

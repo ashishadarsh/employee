@@ -2,10 +2,12 @@ import { Component, inject, input, OnInit } from '@angular/core';
 import { DataService } from '../../data.service';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { Tag } from 'primeng/tag';
+import { Button } from 'primeng/button';
 
 @Component({
   selector: 'app-task',
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, Tag, Button],
   templateUrl: './task.component.html',
   styleUrl: './task.component.css'
 })
@@ -48,5 +50,40 @@ export class TaskComponent implements OnInit{
       this.empName = data.firstName + ' ' + data.lastName;
     })
   }
+
+  getSeverity(status: string) {
+    switch (status) {
+      case 'To Do':
+        return 'danger';
+      case 'Done':
+        return 'success';
+      case 'Development':
+        return 'info';
+      case 'QA':
+        return 'warn';
+      case 'Analyse':
+        return null;
+      default:
+        return null;
+    }
+  }
+
+  getSeverityType(type: string) {
+    switch (type) {
+      case 'HotFix':
+        return 'danger';
+      case 'Research':
+        return 'success';
+      case 'Feature':
+        return 'info';
+      case 'BugFix':
+        return 'warn';
+      case 'Update':
+        return null;
+      default:
+        return null;
+    }
+  }
+
 
 }

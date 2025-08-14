@@ -132,3 +132,48 @@ input[type="date"]:focus {
   box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
 }
 
+.modern-modal {
+  display: flex;
+  flex-direction: column;
+  width: 70vw; /* 70% of screen */
+  max-width: 900px;
+  height: 650px; /* fixed height */
+  margin: 0 auto;
+  border-radius: 10px;
+  background: #fff;
+  padding: 16px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+}
+
+.modern-form {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* Scrollable form content */
+.form-scrollable {
+  flex: 1; /* take remaining space */
+  overflow-y: auto;
+  padding-right: 8px; /* avoid scrollbar overlap */
+}
+
+/* Make description scrollable */
+.description-container {
+  height: 150px; /* or adjust */
+}
+
+.scrollable-textarea {
+  height: 100%;
+  overflow-y: auto;
+  resize: none;
+}
+
+/* Fixed buttons at bottom */
+.fixed-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #eee; /* optional separator */
+}

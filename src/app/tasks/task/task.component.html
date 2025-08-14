@@ -1,12 +1,15 @@
-<div *ngIf="!loading && task" class="task-card">
-  <div class="task-header">
+<div *ngIf="!loading && task" class="task-card-modern">
+  <!-- Header -->
+  <div class="task-header-modern">
     <h2>{{ task.title }}</h2>
-    <span class="status-badge" >
-      {{ task.status }}
-    </span>
+    <div class="task-badges">
+      <p-tag [value]="task.type" [severity]="getSeverityType(task.type)" class="type"></p-tag>
+      <p-tag [value]="task.status" [severity]="getSeverity(task.status)"></p-tag>
+    </div>
   </div>
 
-  <div class="task-meta">
+  <!-- Meta Info -->
+  <div class="task-meta-modern">
     <div class="meta-item">
       <span class="meta-label">Assigned Date:</span>
       <span class="meta-value">{{ task.assignedDate | date: 'mediumDate' }}</span>
@@ -15,23 +18,30 @@
       <span class="meta-label">Assigned By:</span>
       <span class="meta-value">{{ empName }}</span>
     </div>
-    <!-- <div class="meta-item">
-      <span class="meta-label">Employee ID:</span>
-      <span class="meta-value">{{ task.empId }}</span>
-    </div> -->
+    <div class="meta-item">
+      <span class="meta-label">Completion Date:</span>
+      <span class="meta-value">{{ task.completionDate | date: 'mediumDate' }}</span>
+    </div>
   </div>
 
-  <div class="task-body">
+  <!-- Scrollable Description -->
+  <div class="task-body-modern scrollable">
     <h4>Description</h4>
     <p>{{ task.description }}</p>
   </div>
 
-  <div class="task-actions">
-    <button class="btn primary" [routerLink]="['/tasks/edit', task._id]" routerLinkActive="router-link-active" >Edit Task</button>
-    <button class="btn secondary" routerLink="/tasks">Back to Tasks</button>
+  <!-- Fixed Actions -->
+  <div class="task-actions-modern fixed-actions">
+    <p-button
+      label="Edit"
+      [routerLink]="['/tasks/edit', task._id]"
+      severity="info"
+    ></p-button>
+
+    <p-button
+      label="Back"
+      routerLink="/tasks"
+      severity="secondary"
+    ></p-button>
   </div>
 </div>
-
-<div *ngIf="loading" class="loading">Loading task details...</div>
-<div *ngIf="error" class="error">{{ error }}</div>
-

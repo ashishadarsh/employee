@@ -1,10 +1,10 @@
-import { Component, computed, DestroyRef, inject, input, OnInit, signal } from '@angular/core';
-import {AbstractControl, FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms'
-import {provideNativeDateAdapter} from '@angular/material/core';
+import { Component, DestroyRef, inject, input, OnInit } from '@angular/core';
+import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { provideNativeDateAdapter } from '@angular/material/core';
 import { DataService } from '../../data.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { of } from 'rxjs';
+import { combineLatest, of } from 'rxjs';
 
 function mustStartWithUppercaseAlphabet(control: AbstractControl) {
   const value = control.value;
@@ -20,34 +20,22 @@ export function forbiddenTitle(control: AbstractControl) {
 
   if (value) {
     const lowerValue = value.toLowerCase();
-    // Check if any forbidden word is included in the value
-    const hasForbiddenWord = forbiddenWords.some(word =>
-      lowerValue.includes(word)
-    );
-
-    if (hasForbiddenWord) {
-      return of({ forbiddenTitle: true });
-    }
+    const hasForbiddenWord = forbiddenWords.some(word => lowerValue.includes(word));
+    if (hasForbiddenWord) return of({ forbiddenTitle: true });
   }
-
   return of(null);
 }
 
-// import {BrowserAnimationsModule} from '@angular/platform-browser/animations'
 @Component({
   selector: 'app-add-task',
   imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './add-task.component.html',
-  styleUrl: './add-task.component.css',
-  providers:[provideNativeDateAdapter()]
+  styleUrls: ['./add-task.component.css'],
+  providers: [provideNativeDateAdapter()]
 })
 export class AddTaskComponent implements OnInit {
 
   taskId = input.required<string>();
-  //public activatedRoute = inject(ActivatedRoute);
-  // 2. paramTaskId = signal<string>('');
-  // taskId = computed(() => this.activatedRoute.snapshot.params['taskid']);
-
   public task: any;
   public tasks: any;
   public loading: boolean = true;
@@ -55,8 +43,7 @@ export class AddTaskComponent implements OnInit {
   public title = 'Add Task';
   public emp: any;
   public teamData: any;
-  public assigneeId: string = '';
-
+  public addTaskForm!: FormGroup;
 
   statusOptions = [
     { value: '0', label: 'To Do' },
@@ -66,95 +53,74 @@ export class AddTaskComponent implements OnInit {
     { value: '4', label: 'Done' }
   ];
 
-  // userOptions = [
-  //   { id: '0', name: 'Ayush Raj' },
-  //   { id: '1', name: 'Ankit Kumar' },
-  //   { id: '2', name: 'Radhika Kumari' },
-  //   { id: '3', name: 'Sushant Raj' },
-  //   { id: '4', name: 'Arav Pathak' }
-  // ];
-
-  // taskid = input.required<string>();
+  tasksType = [
+    { value: '0', label: 'BugFix' },
+    { value: '1', label: 'HotFix' },
+    { value: '2', label: 'Feature' },
+    { value: '3', label: 'Research' },
+    { value: '4', label: 'Update' }
+  ];
 
   private dataService = inject(DataService);
-  private destroyRef = inject(DestroyRef)
-  public addTaskForm!: FormGroup;
-  public teamMembers: any;
+  private destroyRef = inject(DestroyRef);
+  private router = inject(Router);
 
-  constructor(private router: Router) {
-  }
+  constructor(private route: ActivatedRoute) {}
 
   ngOnInit(): void {
-    // 2.
-    // const subscription = this.activatedRoute.paramMap.subscribe(params => {
-    //   const taskId = params.get('taskId');
-    //   if (taskId) {
-    //     this.paramTaskId.set(taskId);
-    //   }
-    //   }
-    // );
+    // Get taskId from route if editing
+    this.taskId = this.route.snapshot.params['taskId'];
 
-    //console.log("paramTaskId", this.paramTaskId());
+    // Combine tasks, employee, and team data to initialize form once all are ready
+    const tasks$ = this.dataService.tasks$;
+    const emp$ = this.dataService.employee$;
+    const team$ = this.dataService.employeesByTeam$;
 
+    const combined$ = combineLatest([tasks$, emp$, team$]);
 
-    this.fetchTasks();
-    this.fetchEmployeeData();
-    this.task = this.tasks?.find((task: any) => task._id === this.taskId());
+    const subscription = combined$.subscribe(
+      ([tasks, emp, teamData]) => {
+        this.tasks = tasks;
+        this.emp = emp;
+        this.teamData = teamData.filter(d => d._id !== this.emp._id);
 
+        // Determine if editing an existing task
+        this.task = this.tasks?.find((t: any) => t._id === this.taskId);
+        if (this.task) this.title = 'Edit Task';
 
-    if (this.task) {
-      this.title = 'Edit Task';
-    }
-    this.addTaskForm = new FormGroup({
-      'title': new FormControl(this.task?.title? this.task?.title: null, {
-        validators: [Validators.required, Validators.minLength(5), mustStartWithUppercaseAlphabet],
-        asyncValidators: [forbiddenTitle],
-      }),
-      'description': new FormControl(this.task?.description? this.task?.description: null, {
-        validators: [Validators.required, Validators.minLength(10), mustStartWithUppercaseAlphabet],
-        updateOn: 'blur'
-      }),
-      'status': new FormControl(this.task?.status? this.task?.status: '', Validators.required),
-      'empId': new FormControl(this.task?.empId? 'Salman': '', Validators.required),
-      completionDate: new FormControl(this.task?.completionDate? this.task?.completionDate: null, Validators.required)
-    })
-    //this.destroyRef.onDestroy(() => subscription.unsubscribe());
-  }
+        // Initialize form
+        this.initializeForm();
 
-  fetchEmployeeData() {
-    const subs = this.dataService.employee$.subscribe(data => {
-      this.emp = data;
-      this.dataService.employeesByTeam$.subscribe(teamData => {
-        if(teamData) {
-          this.teamData = teamData.filter(data => data._id !== this.emp._id);
-        }
-      }, error => {
-        this.error = 'Failed to load employee data.';
-      })
-      this.loading = false;
-      }, error => {
-        this.emp = null;
-        this.error = 'Failed to load employee data.';
+        this.loading = false;
+      },
+      error => {
+        this.error = 'Failed to load data.';
         this.loading = false;
       }
     );
 
-    this.assigneeId = this.emp?._id || '';
-
-    this.destroyRef.onDestroy(() => subs.unsubscribe());
+    this.destroyRef.onDestroy(() => subscription.unsubscribe());
   }
 
-
-  fetchTasks() {
-    this.dataService.tasks$.subscribe(data => {
-      this.tasks = data;
-      this.loading = false;
-    }, error => {
-      this.tasks = null;
-      this.error = 'Failed to load employee tasks.';
-      this.loading = false;
-    }
-    )
+  initializeForm() {
+    this.addTaskForm = new FormGroup({
+      title: new FormControl(this.task?.title || '', {
+        validators: [Validators.required, Validators.minLength(5), mustStartWithUppercaseAlphabet],
+        asyncValidators: [forbiddenTitle],
+        updateOn: 'blur'
+      }),
+      description: new FormControl(this.task?.description || '', {
+        validators: [Validators.required, Validators.minLength(10)],
+        updateOn: 'blur'
+      }),
+      status: new FormControl(this.task?.status || '', Validators.required),
+      type: new FormControl(this.task?.type || '', Validators.required),
+      empId: new FormControl(
+        this.task?.empId || this.teamData?.[0]?._id || '',
+        Validators.required
+      ),
+      completionDate: new FormControl(this.task?.completionDate || null, Validators.required)
+    });
   }
 
   closePopup() {
@@ -162,7 +128,8 @@ export class AddTaskComponent implements OnInit {
   }
 
   onAddingTask() {
-    console.log(this.addTaskForm);
+    console.log(this.addTaskForm.value);
+    // Save or update logic here
     this.router.navigate(['/tasks']);
   }
 }

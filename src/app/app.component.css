@@ -1,4 +1,115 @@
-.router-link-active {
-  color: black;
+/* Navbar Container */
+.navbar-modern {
+  width: 100%;
+  background: linear-gradient(90deg, #c0a9c7, #d6c2d9);
+  padding: 1rem 2rem; /* taller navbar */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  font-family: 'Roboto', sans-serif;
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+}
+
+/* Inner container for spacing and alignment */
+.navbar-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* brand left, logout right */
+  width: 100%;
+}
+
+/* Brand */
+.navbar-brand {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #2e2e2e;
+  text-decoration: none;
+  transition: color 0.3s, transform 0.3s;
+  flex-shrink: 0; /* prevent shrinking */
+}
+
+.navbar-brand:hover {
+  color: #4b2f63;
+  transform: scale(1.05);
+}
+
+/* Links */
+.navbar-links {
+  list-style: none;
+  display: flex;
+  gap: 2rem;
+  margin: 0;
+  padding: 0;
+  flex: 1; /* take remaining space */
+  justify-content: center; /* center the links */
+  align-items: center;
+}
+
+.navbar-links li a {
+  text-decoration: none;
+  color: #2e2e2e;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.navbar-links li a:hover,
+.navbar-links li a.active-link {
+  background-color: rgba(255, 255, 255, 0.3);
+  color: #4b2f63;
+}
+
+/* Chat badge */
+.chat-link .badge {
+  background-color: #ff5e5e;
+  color: white;
+  font-size: 0.75rem;
   font-weight: bold;
+  padding: 0.2rem 0.5rem;
+  border-radius: 12px;
+  margin-left: 0.3rem;
+  vertical-align: top;
+}
+
+/* Logout link */
+.navbar-actions .logout-link {
+  cursor: pointer;
+  color: #2e2e2e;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.navbar-actions .logout-link:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+  color: #4b2f63;
+}
+
+/* Responsive: collapse links on mobile */
+@media (max-width: 768px) {
+  .navbar-container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .navbar-links {
+    flex-direction: column;
+    width: 100%;
+    justify-content: flex-start;
+    gap: 1rem;
+    margin-top: 0.5rem;
+  }
+
+  .navbar-actions {
+    margin-top: 0.5rem;
+    align-self: flex-end;
+  }
 }

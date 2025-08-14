@@ -1,57 +1,37 @@
-<nav class="navbar navbar-expand-lg "style="background-color: #c0a9c7;">
-  <div class="container-fluid">
+<nav class="navbar-modern">
+  <div class="navbar-container">
+    <!-- Left: Brand -->
     <a class="navbar-brand" routerLink="/">Employee</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item" *ngIf="isAuthenticated">
-          <a class="nav-link" aria-current="page" routerLink="/dashboard" routerLinkActive="router-link-active">Dashboard</a>
-        </li>
-        <li class="nav-item" *ngIf="isAuthenticated">
-          <a class="nav-link" aria-current="page" routerLink="/profile" routerLinkActive="router-link-active">Profile</a>
-        </li>
-        <li class="nav-item" *ngIf="isAuthenticated">
-          <a class="nav-link" routerLink="/tasks" routerLinkActive="router-link-active">Tasks</a>
-        </li>
-        <li class="nav-item" *ngIf="isAuthenticated">
-          <a class="nav-link" routerLink="/chat" routerLinkActive="router-link-active">
-            Chat
-            <span matBadge="15" matBadgeOverlap="false" matBadgeColor="accent" style="margin-left: 5px;"></span>
-          </a>
-        </li>
-        <li class="nav-item" *ngIf="!isAuthenticated">
-          <a class="nav-link" routerLink="/auth" routerLinkActive="router-link-active">Authenticate</a>
-        </li>
 
-        <!-- <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Dropdown
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" href="#">Action</a></li>
-            <li><a class="dropdown-item" href="#">Another action</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="#">Something else here</a></li>
-          </ul>
-        </li> -->
-      </ul>
-      <ul class="nav justify-content-end">
-        <li class="nav-item" *ngIf="isAuthenticated">
-          <a class="nav-link" style="cursor: pointer;" (click)="logout()">logout</a>
-        </li>
-      </ul>
-      <!-- <form class="d-flex">
+    <!-- Center: Links -->
+    <ul class="navbar-links">
+      <li *ngIf="isAuthenticated">
+        <a routerLink="/dashboard" routerLinkActive="active-link">Dashboard</a>
+      </li>
+      <li *ngIf="isAuthenticated">
+        <a routerLink="/profile" routerLinkActive="active-link">Profile</a>
+      </li>
+      <li *ngIf="isAuthenticated">
+        <a routerLink="/tasks" routerLinkActive="active-link">Tasks</a>
+      </li>
+      <li *ngIf="isAuthenticated" class="chat-link">
+        <a routerLink="/chat" routerLinkActive="active-link">
+          Chat
+          <span class="badge">15</span>
+        </a>
+      </li>
+      <li *ngIf="!isAuthenticated">
+        <a routerLink="/auth" routerLinkActive="active-link">Authenticate</a>
+      </li>
+    </ul>
 
-
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success" type="submit">Search</button>
-      </form> -->
+    <!-- Right: Logout -->
+    <div class="navbar-actions">
+      <a *ngIf="isAuthenticated" (click)="logout()" class="logout-link">Logout</a>
     </div>
   </div>
 </nav>
 
 <div>
-  <router-outlet />
+  <router-outlet></router-outlet>
 </div>
