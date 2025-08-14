@@ -1,0 +1,50 @@
+.dashboard-container {
+  padding: 1rem;
+  background: #f5f7fa;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* KPI Cards */
+.kpi-row {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+
+.kpi-card {
+  background: #fff;
+  flex: 1 1 150px;
+  padding: 1rem;
+  border-radius: 1rem;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+  text-align: center;
+  font-weight: 600;
+  color: #333;
+}
+
+.kpi-card.completed { background: #d4edda; color: #155724; }
+.kpi-card.todo { background: #fff3cd; color: #856404; }
+.kpi-card.analyse { background: #cce5ff; color: #004085; }
+.kpi-card.development { background: #f9f7cb; color: #7f7f03; }
+.kpi-card.qa { background: #ffcdd5; color: #920147; }
+
+/* Charts Grid */
+.charts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+}
+
+.chart-card {
+  background: #fff;
+  padding: 1rem;
+  border-radius: 1rem;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+}
+
+.chart-card h3 {
+  margin-bottom: 1rem;
+  font-weight: 600;
+  color: #333;
+}

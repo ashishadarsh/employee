@@ -1,9 +1,74 @@
+<div class="dashboard-container">
 
-<div id="chart">
-  <apx-chart
-    [series]="chartOptions.series!"
-    [chart]="chartOptions.chart!"
-    [labels]="chartOptions.labels"
-    [responsive]="chartOptions.responsive!"
-  ></apx-chart>
+  <!-- KPI Cards -->
+  <div class="kpi-row">
+    <div class="kpi-card">
+      <h4>Total Tasks</h4>
+      <p>{{ totalTasks }}</p>
+    </div>
+    <div class="kpi-card completed">
+      <h4>Completed</h4>
+      <p>{{ completedTasks }}</p>
+    </div>
+    <div class="kpi-card todo">
+      <h4>To Do</h4>
+      <p>{{ toDoTasks }}</p>
+    </div>
+    <div class="kpi-card analyse">
+      <h4>Analyse</h4>
+      <p>{{ analyseTasks }}</p>
+    </div>
+    <div class="kpi-card development">
+      <h4>Development</h4>
+      <p>{{ developmentTasks }}</p>
+    </div>
+    <div class="kpi-card qa">
+      <h4>QA</h4>
+      <p>{{ qaTasks }}</p>
+    </div>
+  </div>
+
+  <!-- Charts Grid -->
+  <div class="charts-grid">
+    <div class="chart-card">
+      <h3>Pie Chart</h3>
+      <apx-chart [series]="pieSeries" [chart]="pieChartOptions.chart" [labels]="pieChartOptions.labels" [responsive]="pieChartOptions.responsive"></apx-chart>
+    </div>
+
+    <div class="chart-card">
+      <h3>Donut Chart</h3>
+      <apx-chart [series]="donutSeries" [chart]="donutChartOptions.chart" [labels]="donutChartOptions.labels" [responsive]="donutChartOptions.responsive"></apx-chart>
+    </div>
+
+    <div class="chart-card">
+      <h3>Radial Chart</h3>
+      <apx-chart [series]="radialSeries" [chart]="radialChartOptions.chart" [plotOptions]="radialChartOptions.plotOptions" [labels]="radialChartOptions.labels"></apx-chart>
+    </div>
+
+    <div class="chart-card">
+      <h3>Line Chart</h3>
+      <apx-chart [series]="lineSeries" [chart]="lineChartOptions.chart" [xaxis]="lineChartOptions.xaxis" [stroke]="lineChartOptions.stroke"></apx-chart>
+    </div>
+
+    <div class="chart-card">
+      <h3>Area Chart</h3>
+      <apx-chart [series]="areaSeries" [chart]="areaChartOptions.chart" [xaxis]="areaChartOptions.xaxis" [stroke]="areaChartOptions.stroke" [fill]="areaChartOptions.fill"></apx-chart>
+    </div>
+
+    <div class="chart-card">
+      <h3>Bar Chart</h3>
+      <apx-chart [series]="barSeries" [chart]="barChartOptions.chart" [xaxis]="barChartOptions.xaxis"></apx-chart>
+    </div>
+
+    <div class="chart-card">
+      <h3>Stacked Bar Chart</h3>
+      <apx-chart [series]="stackedBarOptions.series" [chart]="stackedBarOptions.chart" [xaxis]="stackedBarOptions.xaxis" [plotOptions]="stackedBarOptions.plotOptions"></apx-chart>
+    </div>
+
+    <div class="chart-card">
+      <h3>Radar Chart</h3>
+      <apx-chart [series]="radarChartOptions.series" [chart]="radarChartOptions.chart" [labels]="radarChartOptions.labels"></apx-chart>
+    </div>
+  </div>
+
 </div>

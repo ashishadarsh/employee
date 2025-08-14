@@ -1,7 +1,6 @@
 import { Routes } from '@angular/router';
 
 import { TasksComponent } from './tasks/tasks.component';
-import { ProfileComponent } from './profile/profile.component';
 import { AuthComponent } from './auth/auth.component';
 import { AuthGuard } from './auth/auth.guard';
 import { BrandingComponent } from './branding/branding.component';

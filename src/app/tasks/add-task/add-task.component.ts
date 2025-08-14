@@ -104,14 +104,15 @@ export class AddTaskComponent implements OnInit {
 
   initializeForm() {
     this.addTaskForm = new FormGroup({
+      _id: new FormControl(this.task?._id || null),
       title: new FormControl(this.task?.title || '', {
         validators: [Validators.required, Validators.minLength(5), mustStartWithUppercaseAlphabet],
         asyncValidators: [forbiddenTitle],
-        updateOn: 'blur'
+        updateOn: 'change'
       }),
       description: new FormControl(this.task?.description || '', {
         validators: [Validators.required, Validators.minLength(10)],
-        updateOn: 'blur'
+        updateOn: 'change'
       }),
       status: new FormControl(this.task?.status || '', Validators.required),
       type: new FormControl(this.task?.type || '', Validators.required),
@@ -128,8 +129,24 @@ export class AddTaskComponent implements OnInit {
   }
 
   onAddingTask() {
-    console.log(this.addTaskForm.value);
+    this.loading = true;
+    if(this.task) {
+      this.addTaskForm.patchValue({ _id: this.task._id });
+    }
+    console.log('Form Value:', this.addTaskForm.value);
+
+    this.dataService.createTask(this.addTaskForm.value).subscribe(
+      response => {
+        console.log('Task saved successfully:', response);
+        this.router.navigate(['/tasks']);
+        this.loading = false
+      },
+      error => {
+        console.error('Error saving task:', error);
+        this.loading = false
+        this.router.navigate(['/tasks']);
+      }
+    );
     // Save or update logic here
-    this.router.navigate(['/tasks']);
   }
 }

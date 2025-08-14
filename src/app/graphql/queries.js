@@ -148,23 +148,33 @@ export async function getEmployeesByTeam(team) {
   return data.getEmployeesByTeam;
 }
 
-export async function createNewTask() {
+export async function createNewTask({_id, title, description, empId, completionDate, status, type}) {
+  console.log({_id, title, description, empId, completionDate, status, type});
+
   const mutation = gql`
-    mutation createTaskForEmployee($text: String!) {
-      createTaskForEmployee(text: $text) {
-        _id
-        empId
-        assigneeId
+    mutation createTask($input: createTaskInput!) {
+      createTaskForEmployee(input: $input) {
         title
         description
+        assignedDate
         status
+        empId
+        type
       }
     }
   `;
 
   const { data } = await apolloClient.mutate({
     mutation,
-    variables: { text: newMsg },
+    variables: { "input": {
+    _id,
+    title,
+    description,
+    empId,
+    completionDate,
+    status,
+    type
+  } },
   });
   console.log({ data });
 

@@ -1,8 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, from } from 'rxjs';
-import { getEmployee, getEmployeeTasks, getEmployeesByTeam, getMessages, messgeAddedSubscription } from './graphql/queries';
+import { getEmployee, getEmployeeTasks, getEmployeesByTeam, getMessages, messgeAddedSubscription, createNewTask } from './graphql/queries';
 import { ApolloClient } from '@apollo/client/core';
-import { FormArray } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root',
@@ -70,6 +69,12 @@ export class DataService {
   setEmployeeId(id: string | undefined) {
     this.employeeIdSubject.next(id);
   }
+
+  // Create a new task
+  createTask(taskData: any): Observable<any> {
+    return from(createNewTask(taskData));
+  }
+
 
   // Fetch and store data
   fetchAndStoreEmployeeData() {
