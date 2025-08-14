@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, from } from 'rxjs';
-import { getEmployee, getEmployeeTasks, getEmployeesByTeam, getMessages, messgeAddedSubscription, createNewTask } from './graphql/queries';
+import { BehaviorSubject, EMPTY, Observable, from } from 'rxjs';
+import { getEmployee, getEmployeeTasks, getEmployeesByTeam, getMessages, messgeAddedSubscription, createNewTask, getUnicastMessages, unicastMessgeAddedSubscription } from './graphql/queries';
 import { ApolloClient } from '@apollo/client/core';
 
 @Injectable({
@@ -14,6 +14,7 @@ export class DataService {
   public employeesByTeam$ = new BehaviorSubject<any>(null);
   public tasks$ = new BehaviorSubject<any>(null);
   public messages$ = new BehaviorSubject<any[]>([]);
+  public unicastMessages$ = new BehaviorSubject<any[]>([]);
 
   constructor() {
   }
@@ -22,16 +23,27 @@ export class DataService {
   getMessages(): Observable<any> {
     const employeeId = this.employeeIdSubject.value;
     if (!employeeId) {
-      return new Observable();
+      return EMPTY;
     }
     return from(getMessages());
   }
+
+  getUnicastMessages(receiverEmpId: string): Observable<any> {
+    const senderEmpId = this.employeeIdSubject.value;
+    console.log(`Sender ID: ${senderEmpId}, Receiver ID: ${receiverEmpId}`);
+
+    if (!senderEmpId || !receiverEmpId) {
+      return EMPTY;
+    }
+    return from(getUnicastMessages(senderEmpId, receiverEmpId));
+  }
+
 
   // Fetch employee data as Observable
   getEmployeeData(): Observable<any> {
     const employeeId = this.employeeIdSubject.value;
     if (!employeeId) {
-      return new Observable();
+      return EMPTY;
     }
     return from(getEmployee(employeeId));
   }
@@ -39,7 +51,7 @@ export class DataService {
   getTaskAssigneeData(employeeId): Observable<any> {
     // const employeeId = this.employeeIdSubject.value;
     if (!employeeId) {
-      return new Observable();
+      return EMPTY;
     }
     return from(getEmployee(employeeId));
   }
@@ -47,7 +59,7 @@ export class DataService {
   getEmployeesByTeam(): Observable<any> {
     const employee = this.employee$.value;
     if (!employee) {
-      return new Observable();
+      return EMPTY;
     }
     return from(getEmployeesByTeam(employee.team));
   }
@@ -56,7 +68,7 @@ export class DataService {
   getEmployeeAllTasks(): Observable<any> {
     const employeeId = this.employeeIdSubject.value;
     if (!employeeId) {
-      return new Observable();
+      return EMPTY;
     }
     return from(getEmployeeTasks(employeeId));
   }
@@ -131,6 +143,20 @@ export class DataService {
     );
   }
 
+  fetchAndStoreUnicastMessages(receiverEmpId: string) {
+    // Fetch existing messages
+    this.getUnicastMessages(receiverEmpId).subscribe(
+      (data) => {
+        this.unicastMessages$.next(data);
+        // Subscribe to new messages
+        this.subscribeToNewUnicastMessages();
+      },
+      (error) => {
+        console.error('Error fetching messages:', error);
+      }
+    );
+  }
+
   subscribeToNewMessages() {
     this.apolloClient
       .subscribe({
@@ -148,5 +174,23 @@ export class DataService {
         error: (error) => console.error('Subscription error:', error),
       });
   }
+
+  subscribeToNewUnicastMessages() {
+    this.apolloClient
+      .subscribe({
+        query: unicastMessgeAddedSubscription,
+      })
+      .subscribe({
+        next: ({ data }) => {
+          const newMessage = data?.unicastMessageAdded;
+          if (newMessage && newMessage.receiverEmpId.toString() === this.employeeIdSubject.value) {
+            this.unicastMessages$.next([...(this.unicastMessages$.value || []), newMessage]);
+            console.log('New unicast message received:', newMessage); // add log
+          }
+        },
+        error: (error) => console.error('Subscription error:', error),
+      });
+  }
+
 
 }

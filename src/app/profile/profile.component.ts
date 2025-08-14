@@ -2,13 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { DataService } from '../data.service';  // Assuming the service is named DataService
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
+import { RouterLink, RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css',
-  imports: [CommonModule, MatIconModule]
+  imports: [CommonModule, MatIconModule, RouterLink, RouterOutlet]
 })
 export class ProfileComponent implements OnInit {
   public emp: any;

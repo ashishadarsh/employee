@@ -40,8 +40,11 @@ export class TasksComponent implements OnInit {
   }
 
   fetchTasks() {
+    console.log('Fetching tasks...');
+
     this.dataService.tasks$.subscribe(
       (data: any[]) => {
+        console.log('Tasks fetched:');
         this.tasks = [...data];
         this.tasks = this.tasks?.map((task: any) => {
           return {

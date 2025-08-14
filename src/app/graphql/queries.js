@@ -98,6 +98,31 @@ export async function getMessages() {
   return data.messages;
 }
 
+export async function getUnicastMessages(senderEmpId, receiverEmpId) {
+  const query = gql`
+    query getUnicastMessages($senderEmpId: ID!, $receiverEmpId: ID!) {
+      UnicastMessages(senderEmpId: $senderEmpId, receiverEmpId: $receiverEmpId) {
+        _id
+        senderEmpId
+        senderName
+        text
+        date
+        receiverEmpId
+      }
+    }
+  `;
+
+  const { data } = await apolloClient.query({
+    query,
+    variables: { senderEmpId, receiverEmpId },
+    fetchPolicy: 'network-only',
+  });
+  console.log("Unicast Messages: ", data);
+
+  return data.UnicastMessages;
+}
+
+
 export async function getEmployeeTasks(empId) {
   const query = gql`
     query tasksForEmployee($empId: ID!){
@@ -174,7 +199,7 @@ export async function createNewTask({_id, title, description, empId, completionD
     type
   } },
   });
-  return data.addMessage;
+  return data.createTaskForEmployee;
 }
 
 export async function addMessage(newMsg) {
@@ -197,6 +222,30 @@ export async function addMessage(newMsg) {
   return data.addMessage;
 }
 
+export async function addUnicastMessage(text, senderEmpId, receiverEmpId) {
+  if(!text || !senderEmpId || !receiverEmpId) {
+    throw new Error("Invalid input for addUnicastMessage");
+  }
+  const mutation = gql`
+    mutation addUnicastMessage($input: createUnicastMessageInput!) {
+      addUnicastMessage(input: $input) {
+        _id
+        senderEmpId
+        senderName
+        text
+        date
+        receiverEmpId
+      }
+    }
+  `;
+
+  const { data } = await apolloClient.mutate({
+    mutation,
+    variables: { "input" : {text, senderEmpId, receiverEmpId} },
+  });
+  return data.addUnicastMessage;
+}
+
 export const messgeAddedSubscription = gql`
   subscription messageAddedSubscription {
     message: messageAdded {
@@ -205,6 +254,18 @@ export const messgeAddedSubscription = gql`
         senderName
         text
         date
+    }
+  }
+`
+  export const unicastMessgeAddedSubscription = gql`
+  subscription unicastMessageAddedSubscription {
+    unicastMessageAdded: unicastMessageAdded {
+        _id
+        senderEmpId
+        senderName
+        text
+        date
+        receiverEmpId
     }
   }
 `;
