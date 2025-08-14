@@ -1,27 +1,46 @@
-.chat-modal {
+/* Overlay to block parent page */
+.chat-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: #fff;
+  background: rgba(0, 0, 0, 0.4); /* dimmed background */
   z-index: 2000;
   display: flex;
-  flex-direction: column;
+  justify-content: flex-end; /* chat on right like WhatsApp */
+  align-items: flex-end;
+  overflow: hidden;
 }
 
+/* Chat modal */
+.chat-modal {
+  width: 350px;
+  max-height: 500px;
+  height: 500px;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  margin: 1rem;
+  overflow: hidden;
+}
+
+/* Header */
 .chat-header {
-  background: #6c5ce7;
+  background: #075e54;
   color: white;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0.8rem 1rem;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
 }
 
+/* Close button */
 .close-btn {
-  font-size: 2rem;
+  font-size: 1.5rem;
   background: none;
   border: none;
   color: white;
@@ -29,38 +48,79 @@
   line-height: 1;
 }
 
+/* Messages */
 .chatbox-messages {
   flex: 1;
-  padding: 1rem;
+  padding: 0.5rem;
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
 }
 
+/* Each message */
 .chat-message {
-  margin-bottom: 0.5rem;
+  margin: 0.3rem 0;
+  display: flex;
 }
 
+.message-bubble {
+  max-width: 70%;
+  padding: 0.5rem 0.8rem;
+  border-radius: 20px;
+  position: relative;
+  word-wrap: break-word;
+  font-size: 0.9rem;
+}
+
+/* Current user messages */
 .chat-message.current-user {
-  text-align: right;
-  color: #0984e3;
+  justify-content: flex-end;
 }
 
+.chat-message.current-user .message-bubble {
+  background: #dcf8c6;
+  color: #000;
+  border-bottom-right-radius: 0;
+}
+
+/* Other user messages */
+.chat-message:not(.current-user) .message-bubble {
+  background: #ececec;
+  color: #000;
+  border-bottom-left-radius: 0;
+}
+
+/* Timestamp inside bubble */
+.timestamp {
+  display: block;
+  font-size: 0.7rem;
+  color: #555;
+  text-align: right;
+  margin-top: 2px;
+}
+
+/* Input */
 .chatbox-input {
   display: flex;
-  padding: 0.8rem;
+  padding: 0.5rem;
   border-top: 1px solid #ddd;
+  background: #f0f0f0;
 }
 
 .chatbox-input input {
   flex: 1;
   padding: 0.5rem;
+  border-radius: 20px;
   border: 1px solid #ddd;
+  outline: none;
 }
 
 .chatbox-input button {
   margin-left: 0.5rem;
   padding: 0.5rem 1rem;
-  background: #6c5ce7;
+  background: #25d366;
   color: white;
   border: none;
+  border-radius: 20px;
   cursor: pointer;
 }

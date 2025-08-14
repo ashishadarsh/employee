@@ -1,26 +1,29 @@
-<div class="chat-modal">
-  <div class="chat-header">
-    <h3>Chat</h3>
-    <button class="close-btn" (click)="closeChat()">×</button>
-  </div>
-
-  <div class="chatbox-messages" #messagesContainer>
-    <div *ngFor="let message of messages"
-         class="chat-message"
-         [ngClass]="{'current-user': message.senderName === currentUser?.firstName}">
-      <span class="sender">{{ message.senderName }}:</span>
-      <span class="message">{{ message.text }}</span>
-      <span class="timestamp">{{ message.date | date: 'shortTime' }}</span>
+<div class="chat-overlay">
+  <div class="chat-modal">
+    <div class="chat-header">
+      <h3>Chat</h3>
+      <button class="close-btn" (click)="closeChat()">×</button>
     </div>
-  </div>
 
-  <div class="chatbox-input">
-    <input
-      type="text"
-      [(ngModel)]="newMessage"
-      placeholder="Type a message..."
-      (keyup.enter)="sendMessage()"
-    />
-    <button (click)="sendMessage()">Send</button>
+    <div class="chatbox-messages" #messagesContainer>
+      <div *ngFor="let message of messages"
+           class="chat-message"
+           [ngClass]="{'current-user': message.senderName === currentUser?.firstName}">
+        <div class="message-bubble">
+          <span class="message">{{ message.text }}</span>
+          <span class="timestamp">{{ message.date | date: 'shortTime' }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="chatbox-input">
+      <input
+        type="text"
+        [(ngModel)]="newMessage"
+        placeholder="Type a message..."
+        (keyup.enter)="sendMessage()"
+      />
+      <button (click)="sendMessage()">Send</button>
+    </div>
   </div>
 </div>

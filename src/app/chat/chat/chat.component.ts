@@ -19,8 +19,22 @@ export class ChatComponent {
   messages: any[] = [];
   newMessage = '';
   currentUser: any;
+  private firstLoad = true;
 
   constructor(private dataService: DataService, private router: Router) {}
+
+  ngAfterViewInit(): void {
+    // Scroll after the view is initialized
+    this.scrollToBottom();
+  }
+
+  ngAfterViewChecked(): void {
+    // Ensure it scrolls on first load after messages render
+    if (this.firstLoad && this.messages.length > 0) {
+      this.scrollToBottom();
+      this.firstLoad = false;
+    }
+  }
 
   ngOnInit(): void {
     this.dataService.employee$.subscribe(data => {
