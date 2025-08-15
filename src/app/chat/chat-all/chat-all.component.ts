@@ -1,43 +1,49 @@
-import { CommonModule } from '@angular/common';
-import { Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 import { DataService } from '../../data.service';
-import { addMessage } from '../../graphql/queries'
+import { addMessage } from '../../graphql/queries';
 
 @Component({
   selector: 'app-chat-all',
+  standalone: true,
   imports: [FormsModule, CommonModule],
   templateUrl: './chat-all.component.html',
-  styleUrl: './chat-all.component.css'
+  styleUrls: ['./chat-all.component.css']
 })
 export class ChatAllComponent implements OnInit {
   @ViewChild('messagesContainer') messagesContainer!: ElementRef;
 
-  messages: any = [];
+  messages: any[] = [];
   newMessage = '';
   currentUser: any;
+  private lastMessageCount = 0;
 
   constructor(private dataService: DataService) {}
 
   ngOnInit(): void {
     this.dataService.employee$.subscribe(data => {
       this.currentUser = data;
-    })
-    this.fetchMessages()
+    });
+    this.fetchMessages();
   }
 
   fetchMessages() {
     this.dataService.messages$.subscribe(data => {
-      this.messages = data;
-    })
-    this.scrollToBottom();
-    // this.dataService.fetchAndStoreMessages();
+      // Check if a new message was added
+      if (data.length > this.lastMessageCount) {
+        this.messages = data;
+        this.scrollToBottom();
+      } else {
+        this.messages = data; // just update without scrolling
+      }
+      this.lastMessageCount = data.length;
+    });
   }
 
   sendMessage() {
-    if (this.newMessage.trim()) {
-      const message = addMessage(this.newMessage);
-      // this.messages.push(message);
+    if (this.newMessage.trim() && this.currentUser) {
+      addMessage(this.newMessage, this.currentUser._id);
       this.newMessage = '';
       this.scrollToBottom();
     }
@@ -46,9 +52,9 @@ export class ChatAllComponent implements OnInit {
   private scrollToBottom(): void {
     setTimeout(() => {
       if (this.messagesContainer) {
-        this.messagesContainer.nativeElement.scrollTop = this.messagesContainer.nativeElement.scrollHeight;
+        const container = this.messagesContainer.nativeElement;
+        container.scrollTop = container.scrollHeight;
       }
-    }, 0); // Timeout ensures that scrolling happens after the view updates
+    }, 50); // delay to ensure new message is rendered
   }
-
 }
