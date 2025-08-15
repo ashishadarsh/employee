@@ -1,10 +1,18 @@
 <div class="chat-overlay">
   <div class="chat-modal">
+
+    <!-- Header -->
     <div class="chat-header">
-      <h3>{{name()}}</h3>
+      <div class="chat-user-info">
+        <div class="chat-avatar">
+          {{ getInitials(name()) }}
+        </div>
+        <span class="chat-user-name">{{ name() }}</span>
+      </div>
       <button class="close-btn" (click)="closeChat()">×</button>
     </div>
 
+    <!-- Messages -->
     <div class="chatbox-messages" #messagesContainer>
       <div *ngFor="let message of messages"
            class="chat-message"
@@ -16,6 +24,7 @@
       </div>
     </div>
 
+    <!-- Input -->
     <div class="chatbox-input">
       <input
         type="text"
@@ -25,5 +34,6 @@
       />
       <button (click)="sendMessage()">Send</button>
     </div>
+
   </div>
 </div>

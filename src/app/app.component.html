@@ -16,10 +16,13 @@
       </li>
       <li *ngIf="isAuthenticated" class="chat-link">
         <a routerLink="/chat" routerLinkActive="active-link">
-          Chat
-          <span class="badge">15</span>
+          <span class="chat-label">
+            Chat
+            <span class="badge">15</span>
+          </span>
         </a>
       </li>
+
       <li *ngIf="!isAuthenticated">
         <a routerLink="/auth" routerLinkActive="active-link">Authenticate</a>
       </li>

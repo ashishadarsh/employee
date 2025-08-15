@@ -146,7 +146,7 @@
 .col-name {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 20px;
 }
 
 .avatar-small {
@@ -161,6 +161,31 @@
   align-items: center;
   justify-content: center;
 }
+
+.employee-name-with-icon {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.message-icon-link {
+  font-size: 1.2rem; /* icon size */
+  text-decoration: none;
+  color: #007bff; /* looks like a link */
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.message-icon-link:hover {
+  transform: scale(1.2); /* slight zoom effect */
+  color: #0056b3;
+}
+
+.employee-name {
+  font-weight: 500;
+  color: #333;
+}
+
 
 /* Responsive */
 @media (max-width: 768px) {
