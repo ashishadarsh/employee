@@ -27,6 +27,7 @@ export class AuthService {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ email, password, firstName, lastName, dob, mobileNo, pan, gender, team, designation, address, address2, city, zip }),
+      credentials: 'include',
     });
     if (!response.ok) {
       return null;
@@ -42,6 +43,7 @@ export class AuthService {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ email, password }),
+      credentials: 'include',
     });
     if (!response.ok) {
       return null;
