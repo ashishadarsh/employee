@@ -62,7 +62,7 @@
     <div *ngFor="let item of teamData" class="team-row">
       <div class="col-name">
         <div class="avatar-small">{{ item.firstName.charAt(0) }}{{ item.lastName.charAt(0) }}</div>
-        <a [routerLink]="['/profile/chat', item._id]" routerLinkActive="router-link-active" ><span>{{ item.firstName }} {{ item.lastName }}</span></a>
+        <a [routerLink]="['/profile/chat', item._id, item.firstName + ' ' + item.lastName]" routerLinkActive="router-link-active" ><span>{{ item.firstName }} {{ item.lastName }}</span></a>
       </div>
       <div class="col-role">{{ item.designation }}</div>
       <div class="col-email">{{ item.email }}</div>

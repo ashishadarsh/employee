@@ -31,7 +31,7 @@ export const routes: Routes = [
   { path: 'chat', loadComponent: () => import('./chat/chat-all/chat-all.component').then(mod => mod.ChatAllComponent), canActivate: [AuthGuard] },
   { path: 'chat/uni', loadComponent: () => import('./chat/chat/chat.component').then(mod => mod.ChatComponent), canActivate: [AuthGuard] },
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard], children: [
-    { path: 'chat/:id', loadComponent: () => import('./chat/chat/chat.component').then(mod => mod.ChatComponent), canActivate: [AuthGuard] },
+    { path: 'chat/:id/:name', loadComponent: () => import('./chat/chat/chat.component').then(mod => mod.ChatComponent), canActivate: [AuthGuard] },
   ] },
   {path: '**', redirectTo: '/', pathMatch: 'full'}
 ];

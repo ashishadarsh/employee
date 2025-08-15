@@ -1,135 +1,147 @@
-<div class="container">
-  <div class="row justify-content-center">
-    <div class="col-md-6">
-      <div class="card shadow-sm mt-4">
-        <div class="card-body">
-          <h3 class="text-center mb-4">{{ isLoginMode ? 'Login' : 'Sign Up' }}</h3>
-          <div *ngIf="loading" class="text-center">
-            <app-loading-spinner></app-loading-spinner>
+<div class="auth-wrapper" [ngClass]="{ 'dark-mode': isDarkMode }">
+  <div class="auth-card">
+    <!-- Header -->
+    <div class="auth-header">
+      <h2>{{ isLoginMode ? 'Login' : 'Sign Up' }}</h2>
+      <p>{{ isLoginMode ? 'Welcome back! Please login to continue.' : 'Create a new account.' }}</p>
+    </div>
+
+    <!-- Error Message -->
+    <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+    <!-- Form -->
+    <form #authForm="ngForm" (ngSubmit)="onSubmit(authForm)" novalidate>
+
+      <!-- Email -->
+      <div class="form-group">
+        <input type="email" id="email" name="email" ngModel required email placeholder=" " />
+        <label for="email">Email</label>
+        <span class="error" *ngIf="authForm.controls['email']?.invalid && authForm.controls['email']?.touched">
+          Please enter a valid email
+        </span>
+      </div>
+
+      <!-- Password -->
+      <div class="form-group password-group">
+        <input
+          [type]="showPassword ? 'text' : 'password'"
+          id="password"
+          name="password"
+          ngModel
+          required
+          minlength="6"
+          placeholder=" "
+        />
+        <label for="password">Password</label>
+        <span class="toggle-pass" (click)="showPassword = !showPassword">
+          {{ showPassword ? 'Hide' : 'Show' }}
+        </span>
+        <span class="error" *ngIf="authForm.controls['password']?.invalid && authForm.controls['password']?.touched">
+          Password must be at least 6 characters
+        </span>
+      </div>
+
+      <!-- Signup Fields -->
+      <div *ngIf="!isLoginMode">
+        <!-- First Name / Last Name -->
+        <div class="form-row">
+          <div class="form-group">
+            <input type="text" id="firstName" name="firstName" ngModel required placeholder=" " />
+            <label for="firstName">First Name</label>
           </div>
-          <div *ngIf="error" class="alert alert-danger" role="alert">{{ error }}</div>
-          <form #authForm="ngForm" (ngSubmit)="onSubmit(authForm)" *ngIf="!loading">
-            <!-- Email Field -->
-            <div class="mb-3">
-              <label for="email" class="form-label">E-Mail</label>
-              <input
-                type="email"
-                id="email"
-                class="form-control"
-                placeholder="Enter your email"
-                ngModel
-                name="email"
-                required
-                email
-                aria-describedby="emailHelp"
-                #email = "ngModel"
-              />
-              <div *ngIf="authForm.controls['email']?.invalid && authForm.controls['email']?.touched" class="text-danger">
-                Please enter a valid email.
-              </div>
-            </div>
-            <!-- Password Field -->
-            <div class="mb-3">
-              <label for="password" class="form-label">Password</label>
-              <input
-                type="password"
-                id="password"
-                class="form-control"
-                placeholder="Enter your password"
-                ngModel
-                name="password"
-                required
-                minlength="6"
-              />
-              <div *ngIf="authForm.controls['password']?.invalid && authForm.controls['password']?.touched" class="text-danger">
-                Password must be at least 6 characters.
-              </div>
-            </div>
-            <!-- Signup Specific Fields -->
-            <div *ngIf="!isLoginMode">
-              <div class="mb-3">
-                <label for="firstName" class="form-label">First Name</label>
-                <input type="text" id="firstName" class="form-control" placeholder="Enter your first name" ngModel name="firstName" required />
-              </div>
-              <div class="mb-3">
-                <label for="lastName" class="form-label">Last Name</label>
-                <input type="text" id="lastName" class="form-control" placeholder="Enter your last name" ngModel name="lastName" required />
-              </div>
-              <div class="row">
-                <div class="col-md-6">
-                  <label for="dateOfBirth" class="form-label">Date of Birth</label>
-                  <input
-                    type="date"
-                    id="dateOfBirth"
-                    class="form-control"
-                    placeholder="Select your date of birth"
-                    [(ngModel)]="dateOfBirth"
-                    name="dob"
-                    required
-                  />
-                </div>
-                <div class="col-md-6">
-                  <label for="mobileNo" class="form-label">Mobile No.</label>
-                  <input type="text" id="mobileNo" class="form-control" placeholder="Enter your mobile number" ngModel name="mobileNo" required />
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-md-6">
-                  <label for="pan" class="form-label">PAN No.</label>
-                  <input type="text" id="pan" class="form-control" placeholder="Enter your pan number" ngModel name="pan" required />
-                </div>
-                <div class="col-md-6">
-                  <label for="gender" class="form-label">Gender</label>
-                  <select class="form-select" ngModel name="gender" required aria-label="Select Gender">
-                    <option *ngFor="let gender of genders">{{ gender.name }}</option>
-                  </select>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-md-6">
-                  <label for="team" class="form-label">Team</label>
-                  <select class="form-select" [(ngModel)]="selectedTeam" (ngModelChange)="onTeamChange()" name="team" required  aria-label="Select Team">
-                    <option *ngFor="let team of teamsWithDesignations">{{ team.name }}</option>
-                  </select>
-                </div>
-                <div class="col-md-6">
-                  <label for="designation" class="form-label">Designation</label>
-                  <select class="form-select" ngModel name="designation" required  aria-label="Select Designation">
-                    <option *ngFor="let designation of designations">{{ designation }}</option>
-                  </select>
-                </div>
-              </div>
-              <div class="mb-3">
-                <label for="address" class="form-label">Address</label>
-                <input type="text" id="address" class="form-control" placeholder="Enter your address" ngModel name="address" required />
-              </div>
-              <div class="mb-3">
-                <label for="address" class="form-label">Address2</label>
-                <input type="text" id="address2" class="form-control" placeholder="Enter your address2" ngModel name="address2" required />
-              </div>
-              <div class="row">
-                <div class="col-md-6">
-                  <label for="city" class="form-label">City</label>
-                  <input type="text" id="city" class="form-control" placeholder="City" ngModel name="city" required />
-                </div>
-                <div class="col-md-6">
-                  <label for="zip" class="form-label">Zip</label>
-                  <input type="text" id="zip" class="form-control" placeholder="Zip Code" ngModel name="zip" required />
-                </div>
-              </div>
-            </div>
-            <!-- Action Buttons -->
-            <div class="text-center mt-4">
-              <button type="submit" class="btn btn-primary w-100" [disabled]="!authForm.valid">
-                {{ isLoginMode ? 'Login' : 'Sign Up' }}
-              </button>
-              <button type="button" class="btn btn-link mt-3" (click)="onSwitchMode()">
-                Switch to {{ isLoginMode ? 'Sign Up' : 'Login' }}
-              </button>
-            </div>
-          </form>
+          <div class="form-group">
+            <input type="text" id="lastName" name="lastName" ngModel required placeholder=" " />
+            <label for="lastName">Last Name</label>
+          </div>
+        </div>
+
+        <!-- DOB / Mobile -->
+        <div class="form-row">
+          <div class="form-group">
+            <input type="date" id="dob" name="dob" [(ngModel)]="dateOfBirth" required placeholder=" " />
+            <label for="dob">Date of Birth</label>
+          </div>
+          <div class="form-group">
+            <input type="text" id="mobileNo" name="mobileNo" ngModel required placeholder=" " />
+            <label for="mobileNo">Mobile No.</label>
+          </div>
+        </div>
+
+        <!-- PAN / Gender -->
+        <div class="form-row">
+          <div class="form-group">
+            <input type="text" id="pan" name="pan" ngModel required placeholder=" " />
+            <label for="pan">PAN No.</label>
+          </div>
+          <div class="form-group">
+            <select id="gender" name="gender" ngModel required>
+              <option *ngFor="let gender of genders">{{ gender.name }}</option>
+            </select>
+            <label for="gender">Gender</label>
+          </div>
+        </div>
+
+        <!-- Team / Designation -->
+        <div class="form-row">
+          <div class="form-group">
+            <select
+              id="team"
+              name="team"
+              [(ngModel)]="selectedTeam"
+              (ngModelChange)="onTeamChange()"
+              required
+            >
+              <option *ngFor="let team of teamsWithDesignations">{{ team.name }}</option>
+            </select>
+            <label for="team">Team</label>
+          </div>
+          <div class="form-group">
+            <select id="designation" name="designation" ngModel required>
+              <option *ngFor="let designation of designations">{{ designation }}</option>
+            </select>
+            <label for="designation">Designation</label>
+          </div>
+        </div>
+
+        <!-- Address / Address2 -->
+        <div class="form-group">
+          <input type="text" id="address" name="address" ngModel required placeholder=" " />
+          <label for="address">Address</label>
+        </div>
+        <div class="form-group">
+          <input type="text" id="address2" name="address2" ngModel required placeholder=" " />
+          <label for="address2">Address 2</label>
+        </div>
+
+        <!-- City / Zip -->
+        <div class="form-row">
+          <div class="form-group">
+            <input type="text" id="city" name="city" ngModel required placeholder=" " />
+            <label for="city">City</label>
+          </div>
+          <div class="form-group">
+            <input type="text" id="zip" name="zip" ngModel required placeholder=" " />
+            <label for="zip">Zip Code</label>
+          </div>
         </div>
       </div>
+
+      <!-- Submit -->
+      <button type="submit" class="btn-primary" [disabled]="!authForm.valid">
+        {{ isLoginMode ? 'Login' : 'Sign Up' }}
+      </button>
+
+      <!-- Switch Mode -->
+      <p class="switch-text">
+        <a href="#" (click)="onSwitchMode(); $event.preventDefault()">
+          Switch to {{ isLoginMode ? 'Sign Up' : 'Login' }}
+        </a>
+      </p>
+    </form>
+
+    <!-- Loading -->
+    <div class="loading-overlay" *ngIf="loading">
+      <app-loading-spinner></app-loading-spinner>
     </div>
   </div>
 </div>

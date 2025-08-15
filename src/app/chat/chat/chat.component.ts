@@ -15,6 +15,7 @@ import { Router } from '@angular/router';
 export class ChatComponent {
   @ViewChild('messagesContainer') messagesContainer!: ElementRef;
   id = input.required<string>();
+  name = input.required<string>();
 
   messages: any[] = [];
   newMessage = '';

@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { BehaviorSubject, EMPTY, Observable, from } from 'rxjs';
-import { getEmployee, getEmployeeTasks, getEmployeesByTeam, getMessages, messgeAddedSubscription, createNewTask, getUnicastMessages, unicastMessgeAddedSubscription } from './graphql/queries';
+import { getEmployee, getEmployeeTasks, getEmployeesByTeam, getMessages, messgeAddedSubscription, createNewTask, getUnicastMessages, unicastMessageAddedSubscription } from './graphql/queries';
 import { ApolloClient } from '@apollo/client/core';
 
 @Injectable({
@@ -10,6 +10,7 @@ export class DataService {
   private apolloClient = inject(ApolloClient);
 
   public employeeIdSubject = new BehaviorSubject<string | undefined | null>(undefined);
+  public receiverEmployeeIdSubject = new BehaviorSubject<string | undefined | null>(undefined);
   public employee$ = new BehaviorSubject<any>(null);
   public employeesByTeam$ = new BehaviorSubject<any>(null);
   public tasks$ = new BehaviorSubject<any>(null);
@@ -176,14 +177,17 @@ export class DataService {
   }
 
   subscribeToNewUnicastMessages() {
+    console.log('[Subscribing to unicast messages]');
     this.apolloClient
       .subscribe({
-        query: unicastMessgeAddedSubscription,
+        query: unicastMessageAddedSubscription,
       })
       .subscribe({
         next: ({ data }) => {
           const newMessage = data?.unicastMessageAdded;
-          if (newMessage && newMessage.receiverEmpId.toString() === this.employeeIdSubject.value) {
+          console.log(`New unicast message received:`, newMessage);
+
+          if (newMessage && newMessage.senderEmpId.toString() === this.employeeIdSubject.value) {
             this.unicastMessages$.next([...(this.unicastMessages$.value || []), newMessage]);
             console.log('New unicast message received:', newMessage); // add log
           }

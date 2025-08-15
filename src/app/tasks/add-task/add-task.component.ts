@@ -44,6 +44,7 @@ export class AddTaskComponent implements OnInit {
   public emp: any;
   public teamData: any;
   public addTaskForm!: FormGroup;
+  public edit = false;
 
   statusOptions = [
     { value: '0', label: 'To Do' },
@@ -86,7 +87,11 @@ export class AddTaskComponent implements OnInit {
 
         // Determine if editing an existing task
         this.task = this.tasks?.find((t: any) => t._id === this.taskId);
-        if (this.task) this.title = 'Edit Task';
+        if (this.task) {
+          this.title = 'Edit Task';
+          this.edit = true;
+
+        }
 
         // Initialize form
         this.initializeForm();
@@ -133,11 +138,10 @@ export class AddTaskComponent implements OnInit {
     if(this.task) {
       this.addTaskForm.patchValue({ _id: this.task._id });
     }
-    console.log('Form Value:', this.addTaskForm.value);
-
     this.dataService.createTask(this.addTaskForm.value).subscribe(
       response => {
         console.log('Task saved successfully:', response);
+        this.dataService.fetchAndStoreEmployeeTasks();
         this.router.navigate(['/tasks']);
         this.loading = false
       },
@@ -147,6 +151,5 @@ export class AddTaskComponent implements OnInit {
         this.router.navigate(['/tasks']);
       }
     );
-    // Save or update logic here
   }
 }
