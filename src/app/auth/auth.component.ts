@@ -131,6 +131,7 @@ export class AuthComponent {
         form.value.zip
       );
       this.loading = false;
+      this.router.navigate(['/auth']);
     }
 
     form.reset();
