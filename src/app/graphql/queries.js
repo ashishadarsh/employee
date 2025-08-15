@@ -2,7 +2,7 @@ import { ApolloClient, gql, InMemoryCache, ApolloLink, concat, createHttpLink, s
 //import { GraphQLClient } from "graphql-request";
 import { AuthService } from "../auth.service";
 
-import { environment } from "../environments/environment.prod";
+import { environment } from '../../environments/environment.prod';
 
 import {GraphQLWsLink} from '@apollo/client/link/subscriptions'
 import { createClient as createWsClient } from 'graphql-ws';
