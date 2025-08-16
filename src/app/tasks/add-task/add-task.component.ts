@@ -83,15 +83,29 @@ export class AddTaskComponent implements OnInit {
       ([tasks, emp, teamData]) => {
         this.tasks = tasks;
         this.emp = emp;
-        this.teamData = teamData.filter(d => d._id !== this.emp._id);
+        this.teamData = teamData;
 
         // Determine if editing an existing task
         this.task = this.tasks?.find((t: any) => t._id === this.taskId);
         if (this.task) {
           this.title = 'Edit Task';
           this.edit = true;
+          // const assignedId = this.task.empId;
+          // const assignedUser = teamData.find(d => d._id === assignedId);
 
+          // // Include the assigned user if they aren't in the list
+          // const filteredTeam = teamData.filter(d => d._id !== this.emp._id);
+          // if (assignedUser && !filteredTeam.find(d => d._id === assignedUser._id)) {
+          //   filteredTeam.push(assignedUser);
+          // }
+
+          // this.teamData = filteredTeam;
+        } else {
+          this.title = 'Add Task';
+          //this.teamData = teamData.filter(d => d._id !== this.emp._id);
         }
+
+        console.log('task Data:', this.task);
 
         // Initialize form
         this.initializeForm();
@@ -122,7 +136,7 @@ export class AddTaskComponent implements OnInit {
       status: new FormControl(this.task?.status || '', Validators.required),
       type: new FormControl(this.task?.type || '', Validators.required),
       empId: new FormControl(
-        this.task?.empId || this.teamData?.[0]?._id || '',
+        { value: this.task?.empId || this.emp._id, disabled: this.edit },
         Validators.required
       ),
       completionDate: new FormControl(this.task?.completionDate || null, Validators.required)
