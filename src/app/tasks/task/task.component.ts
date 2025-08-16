@@ -22,11 +22,6 @@ export class TaskComponent implements OnInit{
   public error: string = '';
   private dataService = inject(DataService);
 
-  // constructor() {
-  // console.log(`TaskComponent initialized with taskId: ${this.taskId()}`); // Debugging line to check taskId
-
-  // }
-
   ngOnInit(): void {
     this.fetchTasks();
     this.task = this.tasks?.find((task: any) => task._id === this.taskId());

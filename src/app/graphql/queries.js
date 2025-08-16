@@ -47,8 +47,6 @@ export const apolloClient = new ApolloClient({
 });
 
 function isSubscription(operation) {
-  console.log("Checking if operation is a subscription:", operation);
-
   const definition = getMainDefinition(operation.query)
   return definition.kind === Kind.OPERATION_DEFINITION && definition.operation === OperationTypeNode.SUBSCRIPTION;
 }

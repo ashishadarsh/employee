@@ -1,8 +1,8 @@
 //import { HttpClient } from "@angular/common/http";
-import { Injectable } from "@angular/core";
+import { Injectable} from "@angular/core";
 import { jwtDecode, JwtPayload } from "jwt-decode";
 import { DataService } from "./data.service";
-import { Router } from "@angular/router";
+import { BehaviorSubject } from "rxjs";
 
 interface CustomJwtPayload extends JwtPayload {
   email: string;
@@ -10,6 +10,8 @@ interface CustomJwtPayload extends JwtPayload {
 
 @Injectable({providedIn:'root'})
 export class AuthService {
+
+  public isAuthenticated = new BehaviorSubject<Boolean>(false)
 
   private API_URL = 'http://localhost:9000';
   private ACCESS_TOKEN_KEY = 'accessToken';

@@ -1,39 +1,4 @@
-<nav class="navbar-modern">
-  <div class="navbar-container">
-    <!-- Left: Brand -->
-    <a class="navbar-brand" routerLink="/">Employee</a>
-
-    <!-- Center: Links -->
-    <ul class="navbar-links">
-      <li *ngIf="isAuthenticated">
-        <a routerLink="/dashboard" routerLinkActive="active-link">Dashboard</a>
-      </li>
-      <li *ngIf="isAuthenticated">
-        <a routerLink="/profile" routerLinkActive="active-link">Profile</a>
-      </li>
-      <li *ngIf="isAuthenticated">
-        <a routerLink="/tasks" routerLinkActive="active-link">Tasks</a>
-      </li>
-      <li *ngIf="isAuthenticated" class="chat-link">
-        <a routerLink="/chat" routerLinkActive="active-link">
-          <span class="chat-label">
-            Chat
-            <span class="badge">15</span>
-          </span>
-        </a>
-      </li>
-
-      <li *ngIf="!isAuthenticated">
-        <a routerLink="/auth" routerLinkActive="active-link">Authenticate</a>
-      </li>
-    </ul>
-
-    <!-- Right: Logout -->
-    <div class="navbar-actions">
-      <a *ngIf="isAuthenticated" (click)="logout()" class="logout-link">Logout</a>
-    </div>
-  </div>
-</nav>
+<app-header />
 
 <div>
   <router-outlet></router-outlet>
