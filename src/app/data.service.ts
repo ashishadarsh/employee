@@ -167,8 +167,6 @@ export class DataService {
         next: ({ data }) => {
           const newMessage = data?.message;
           if (newMessage) {
-            console.log({newMessage});
-
             this.messages$.next([...(this.messages$.value || []), newMessage]);
           }
         },

@@ -59,13 +59,6 @@ export class ChatComponent {
     });
   }
 
-  // fetchMessages() {
-  //   this.dataService.unicastMessages$.subscribe(data => {
-  //     this.messages = data;
-  //     console.log('Unicast messages fetched:', this.messages);
-  //   });
-  // }
-
   sendMessage() {
     if (this.newMessage.trim() && this.currentUser) {
       addUnicastMessage(this.newMessage, this.currentUser._id, this.id());

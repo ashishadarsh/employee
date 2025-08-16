@@ -140,7 +140,6 @@ export class AddTaskComponent implements OnInit {
     }
     this.dataService.createTask(this.addTaskForm.value).subscribe(
       response => {
-        console.log('Task saved successfully:', response);
         this.dataService.fetchAndStoreEmployeeTasks();
         this.router.navigate(['/tasks']);
         this.loading = false

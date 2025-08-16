@@ -1,0 +1,143 @@
+/* Navbar Container */
+.navbar-modern {
+  width: 100%;
+  background: linear-gradient(90deg, #c0a9c7, #d6c2d9);
+  padding: 1rem 2rem; /* taller navbar */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  font-family: 'Roboto', sans-serif;
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+}
+
+/* Inner container for spacing and alignment */
+.navbar-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* brand left, logout right */
+  width: 100%;
+}
+
+/* Brand */
+.navbar-brand {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #2e2e2e;
+  text-decoration: none;
+  transition: color 0.3s, transform 0.3s;
+  flex-shrink: 0; /* prevent shrinking */
+}
+
+.navbar-brand:hover {
+  color: #4b2f63;
+  transform: scale(1.05);
+}
+
+/* Links */
+.navbar-links {
+  list-style: none;
+  display: flex;
+  gap: 2rem;
+  margin: 0;
+  padding: 0;
+  flex: 1; /* take remaining space */
+  justify-content: center; /* center the links */
+  align-items: center;
+}
+
+.navbar-links li a {
+  text-decoration: none;
+  color: #2e2e2e;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.navbar-links li a:hover,
+.navbar-links li a.active-link {
+  background-color: rgba(255, 255, 255, 0.3);
+  color: #4b2f63;
+}
+
+.chat-link {
+  list-style: none;
+}
+
+.chat-link a {
+  position: relative;
+  text-decoration: none;
+  color: inherit;
+  font-weight: 500;
+  display: inline-block;
+}
+
+.chat-label {
+  position: relative;
+  display: inline-block;
+  padding-right: 0.8rem; /* space for badge to overlap nicely */
+}
+
+.chat-label .badge {
+  position: absolute;
+  top: -0.4rem;  /* moves badge above text */
+  right: -0.6rem; /* moves badge to the right corner */
+  background-color: #ff3b3b;
+  color: white;
+  font-size: 0.65rem;
+  font-weight: bold;
+  padding: 0.15rem 0.4rem;
+  border-radius: 9999px; /* perfectly round pill */
+  line-height: 1;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  min-width: 1rem; /* keeps badge round when 1 digit */
+  text-align: center;
+}
+
+.chat-link a:hover .badge {
+  background-color: #e60000;
+  transition: background-color 0.2s ease;
+}
+
+
+/* Logout link */
+.navbar-actions .logout-link {
+  cursor: pointer;
+  color: #2e2e2e;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.navbar-actions .logout-link:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+  color: #4b2f63;
+}
+
+/* Responsive: collapse links on mobile */
+@media (max-width: 768px) {
+  .navbar-container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .navbar-links {
+    flex-direction: column;
+    width: 100%;
+    justify-content: flex-start;
+    gap: 1rem;
+    margin-top: 0.5rem;
+  }
+
+  .navbar-actions {
+    margin-top: 0.5rem;
+    align-self: flex-end;
+  }
+}
