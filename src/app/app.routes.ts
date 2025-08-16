@@ -21,6 +21,7 @@ import { ProfileComponent } from './profile/profile.component';
 export const routes: Routes = [
   { path: '', component: BrandingComponent },
   { path: 'auth', component: AuthComponent },
+  { path: 'tasks/history/:archive', component: TasksComponent, canActivate: [AuthGuard] },
   {
     path: 'tasks',
     component: TasksComponent,
