@@ -1,7 +1,7 @@
 
 <p-table
     #dt1
-    [value]="tasks"
+    [value]="filteredTasks"
     [globalFilterFields]="['name', 'country.name', 'representative.name', 'status']"
     selectionMode="single"
     dataKey="_id"
@@ -13,46 +13,71 @@
     stateKey="statedemo-session"
 >
 <ng-template pTemplate="caption">
-  <div style="display: flex; align-items: center; gap: 1rem;">
-    <!-- Filter field takes remaining space -->
-    <p-iconfield iconPosition="left" style="flex: 1;">
-      <p-inputicon>
-        <i class="pi pi-search"></i>
-      </p-inputicon>
-      <input
-        pInputText
-        type="text"
-        placeholder="Global Search"
-      />
-    </p-iconfield>
+  <div class="tasks-caption">
 
-    <!-- Button stays on the right -->
-    <p-button
-      label="Add Task"
-      icon="pi pi-plus"
-      variant="outlined"
-      [raised]="true"
-      severity="info"
-      [routerLink]="['/tasks/add']"
-    ></p-button>
+    <!-- Top-right: Search + Add Task -->
+    <div class="search-actions-top">
+      <p-iconfield iconPosition="left">
+        <p-inputicon>
+          <i class="pi pi-search"></i>
+        </p-inputicon>
+        <input
+          pInputText
+          type="text"
+          placeholder="Search..."
+          [(ngModel)]="searchTerm"
+        />
+      </p-iconfield>
+
+      <p-button
+        label="Add Task"
+        icon="pi pi-plus"
+        variant="outlined"
+        [raised]="true"
+        severity="info"
+        [routerLink]="['/tasks/add']"
+      ></p-button>
+    </div>
+
+    <!-- Centered Tabs -->
+    <div class="custom-tabview-wrapper">
+      <p-tabView
+        [activeIndex]="archive() ? 1 : 0"
+        (onChange)="onTabChange($event)"
+        class="custom-tabview"
+      >
+        <p-tabPanel header="Active Tasks"></p-tabPanel>
+        <p-tabPanel header="Archived Tasks"></p-tabPanel>
+      </p-tabView>
+    </div>
+
+    <div class="status-filter">
+      <label>Status:</label>
+      <select [(ngModel)]="selectedStatus">
+        <option value="">All</option>
+        <option *ngFor="let status of statusOptions" [value]="status">{{ status }}</option>
+      </select>
+    </div>
+
   </div>
 </ng-template>
 
+
     <ng-template #header>
         <tr>
-            <th pSortableColumn="name" style="width:25%">
+            <th pSortableColumn="name" style="width:36%">
                 <div class="flex items-center gap-2">
                     Title
                     <p-sortIcon field="name" />
                 </div>
             </th>
-            <th pSortableColumn="type" style="width:25%">
+            <th pSortableColumn="type" style="width:15%">
               <div class="flex items-center gap-2">
                   Type
                   <p-sortIcon field="type" />
               </div>
           </th>
-            <th pSortableColumn="type" style="width:25%">
+            <th pSortableColumn="type" style="width:15%">
               <div class="flex items-center gap-2">
                   Status
                   <p-sortIcon field="type" />
@@ -64,18 +89,20 @@
                     <p-sortIcon field="country.name" />
                 </div>
             </th> -->
-            <th pSortableColumn="representative.name" style="width:25%">
-                <div class="flex items-center gap-2">
-                    Completion Date
-                    <p-sortIcon field="representative.name" />
-                </div>
-            </th>
-            <th pSortableColumn="country.name" style="width:25%">
+            <th pSortableColumn="completionDate" style="width:17%">
               <div class="flex items-center gap-2">
-                  Assigned Date
-                  <p-sortIcon field="country.name" />
+                Completion Date
+                <p-sortIcon field="completionDate" />
               </div>
-          </th>
+            </th>
+
+            <th pSortableColumn="assignedDate" style="width:17%">
+              <div class="flex items-center gap-2">
+                Assigned Date
+                <p-sortIcon field="assignedDate" />
+              </div>
+            </th>
+
         </tr>
     </ng-template>
     <ng-template #body let-task>

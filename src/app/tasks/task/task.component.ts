@@ -24,7 +24,7 @@ export class TaskComponent implements OnInit{
 
   ngOnInit(): void {
     this.fetchTasks();
-    this.task = this.tasks?.find((task: any) => task._id === this.taskId());
+    // this.task = this.tasks?.find((task: any) => task._id === this.taskId());
     this.assigneeId = this.task?.assigneeId || '';
     this.fetchEmployeeName(this.assigneeId);
   }
@@ -32,6 +32,7 @@ export class TaskComponent implements OnInit{
   fetchTasks() {
     this.dataService.tasks$.subscribe(data => {
       this.tasks = data;
+      this.task = this.tasks?.find((task: any) => task._id === this.taskId());
       this.loading = false;
     }, error => {
       this.tasks = null;

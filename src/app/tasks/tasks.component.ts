@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, input, OnInit } from '@angular/core';
 import { DataService } from '../data.service';
 import { ActivatedRoute, NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -11,21 +11,25 @@ import { Button } from 'primeng/button';
 import { InputIcon } from 'primeng/inputicon';
 import { Tag } from 'primeng/tag';
 import { MenuModule } from 'primeng/menu';
+import { TabViewModule } from 'primeng/tabview';
+
 
 @Component({
   selector: 'app-tasks',
   standalone: true,
-  imports: [RouterLink, CommonModule, RouterOutlet, FormsModule, TableModule, InputTextModule, IconField, InputIcon, Tag, Button, MenuModule],
+  imports: [RouterLink, CommonModule, RouterOutlet, FormsModule, TableModule, InputTextModule, IconField, InputIcon, Tag, Button, MenuModule, TabViewModule],
   templateUrl: './tasks.component.html',
   styleUrls: ['./tasks.component.css']
 })
 export class TasksComponent implements OnInit {
   public tasks: any[] = [];
-  public loading = true;
+  public loading = false;
   public error = '';
   public selectedStatus = '';
   public statusOptions: string[] = [];
   childRouteActive = false;
+  archive = input<any>();
+  public searchTerm: string = '';
 
   constructor(private dataService: DataService, private router: Router, private route: ActivatedRoute) {
     this.router.events
@@ -36,34 +40,44 @@ export class TasksComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.fetchTasks();
+      this.fetchTasks(this.archive()); // Pass to fetchTasks
+
   }
 
-  fetchTasks() {
-    this.dataService.tasks$.subscribe(
-      (data: any[]) => {
-        this.tasks = [...data];
-        this.tasks = this.tasks?.map((task: any) => {
-          return {
+  fetchTasks(archive: string) {
+    this.loading = true;
+    this.dataService.tasks$
+      .pipe(
+        filter((tasks): tasks is any[] => Array.isArray(tasks)),
+      )
+      .subscribe(
+        (tasks: any[]) => {
+          // Filter based on archive value
+          const filteredTasks = tasks.filter(task =>
+            archive ? task.status === 'Done' : task.status !== 'Done'
+          );
+
+          this.tasks = filteredTasks.map(task => ({
             ...task,
             originalTitle: task.title,
             title: this.truncateString(task.title)
-          };
-        });
-        this.statusOptions = [...new Set(data.map(task => task.status))];
-        this.loading = false;
-      },
-      error => {
-        this.tasks = [];
-        this.error = 'Failed to load employee tasks.';
-        this.loading = false;
-      }
-    );
+          }));
+
+          this.statusOptions = [...new Set(this.tasks.map(task => task.status))];
+          this.loading = false;
+        },
+        error => {
+          this.tasks = [];
+          this.error = 'Failed to load employee tasks.';
+          this.loading = false;
+        }
+      );
   }
+
 
   truncateString(str) {
     if (typeof str !== 'string') return '';
-    return str.length > 30 ? str.slice(0, 30) + '...' : str;
+    return str.length > 50 ? str.slice(0, 50) + '...' : str;
   }
 
   getStatusClass(status: string): string {
@@ -113,9 +127,22 @@ getSeverityType(status: string) {
 }
 
 
-  get filteredTasks() {
-    return this.selectedStatus
-      ? this.tasks.filter(task => task.status === this.selectedStatus)
-      : this.tasks;
+get filteredTasks() {
+  const tasksFilteredByStatus = this.selectedStatus
+    ? this.tasks.filter(task => task.status === this.selectedStatus)
+    : this.tasks;
+
+  if (!this.searchTerm) return tasksFilteredByStatus;
+
+  const term = this.searchTerm.toLowerCase();
+  return tasksFilteredByStatus.filter(task =>
+    task.title.toLowerCase().includes(term)
+  );
+}
+
+  onTabChange(event: any) {
+    const index = event.index;
+    this.router.navigate([index === 0 ? '/tasks' : '/tasks/history/archive']);
   }
+
 }
