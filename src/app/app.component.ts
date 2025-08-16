@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Router,RouterOutlet } from '@angular/router';
+import { ActivatedRoute, ActivatedRouteSnapshot, ResolveFn, Router,RouterOutlet, RouterStateSnapshot } from '@angular/router';
 import { DataService } from './data.service.js';
 import { AuthService } from './auth.service.js';
 import { MatIconModule } from '@angular/material/icon';
@@ -39,4 +39,8 @@ export class AppComponent implements OnInit {
     });
   }
 
+}
+
+export const resolveUserName: ResolveFn<string> = (activatedRoute: ActivatedRouteSnapshot, RouterState: RouterStateSnapshot) => {
+  return activatedRoute.paramMap.get('name') || 'Unknown User';
 }
