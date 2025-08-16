@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import { effect, inject, Injectable, signal } from '@angular/core';
 import { BehaviorSubject, EMPTY, Observable, from } from 'rxjs';
 import { getEmployee, getEmployeeTasks, getEmployeesByTeam, getMessages, messgeAddedSubscription, createNewTask, getUnicastMessages, unicastMessageAddedSubscription } from './graphql/queries';
 import { ApolloClient } from '@apollo/client/core';
@@ -16,8 +16,16 @@ export class DataService {
   public tasks$ = new BehaviorSubject<any>(null);
   public messages$ = new BehaviorSubject<any[]>([]);
   public unicastMessages$ = new BehaviorSubject<any[]>([]);
+  public receiverEmpId = signal<string | undefined | null>(undefined);
+  private hasSubscribedToUnicast = false;
 
   constructor() {
+    effect(() => {
+      const receiverId = this.receiverEmpId();
+      if (receiverId) {
+        this.fetchAndStoreUnicastMessages(); // or anything else
+      }
+    });
   }
 
 
@@ -31,8 +39,6 @@ export class DataService {
 
   getUnicastMessages(receiverEmpId: string): Observable<any> {
     const senderEmpId = this.employeeIdSubject.value;
-    console.log(`Sender ID: ${senderEmpId}, Receiver ID: ${receiverEmpId}`);
-
     if (!senderEmpId || !receiverEmpId) {
       return EMPTY;
     }
@@ -144,13 +150,16 @@ export class DataService {
     );
   }
 
-  fetchAndStoreUnicastMessages(receiverEmpId: string) {
+  fetchAndStoreUnicastMessages() {
     // Fetch existing messages
-    this.getUnicastMessages(receiverEmpId).subscribe(
+    this.getUnicastMessages(this.receiverEmpId()!).subscribe(
       (data) => {
         this.unicastMessages$.next(data);
         // Subscribe to new messages
-        this.subscribeToNewUnicastMessages();
+        if (!this.hasSubscribedToUnicast) {
+          this.subscribeToNewUnicastMessages();
+          this.hasSubscribedToUnicast = true;
+        }
       },
       (error) => {
         console.error('Error fetching messages:', error);
@@ -175,7 +184,6 @@ export class DataService {
   }
 
   subscribeToNewUnicastMessages() {
-    console.log('[Subscribing to unicast messages]');
     this.apolloClient
       .subscribe({
         query: unicastMessageAddedSubscription,
@@ -183,16 +191,22 @@ export class DataService {
       .subscribe({
         next: ({ data }) => {
           const newMessage = data?.unicastMessageAdded;
-          console.log(`New unicast message received:`, newMessage);
+          if (!newMessage) return;
 
-          if (newMessage && newMessage.senderEmpId.toString() === this.employeeIdSubject.value) {
-            this.unicastMessages$.next([...(this.unicastMessages$.value || []), newMessage]);
-            console.log('New unicast message received:', newMessage); // add log
+          const currentUserId = this.employeeIdSubject.value;
+          const activeReceiverId = this.receiverEmpId();
+          const isRelevant =
+            (newMessage.senderEmpId === currentUserId && newMessage.receiverEmpId === activeReceiverId) ||
+            (newMessage.receiverEmpId === currentUserId && newMessage.senderEmpId === activeReceiverId);
+
+          if (isRelevant) {
+            const updated = [...(this.unicastMessages$.value || []), newMessage];
+            this.unicastMessages$.next(updated);
+          } else {
+            console.log('⛔ Irrelevant message, skipped.');
           }
         },
         error: (error) => console.error('Subscription error:', error),
       });
   }
-
-
 }

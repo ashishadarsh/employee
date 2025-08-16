@@ -60,6 +60,7 @@ export class AuthService {
         this.dataService.fetchAndStoreEmployeeData();
         this.dataService.fetchAndStoreEmployeeTasks();
         this.dataService.fetchAndStoreMessages();
+        this.dataService.fetchAndStoreUnicastMessages();
       }
       return user;
     }
@@ -83,6 +84,7 @@ export class AuthService {
       this.dataService.fetchAndStoreEmployeeData();
       this.dataService.fetchAndStoreEmployeeTasks();
       this.dataService.fetchAndStoreMessages();
+      this.dataService.fetchAndStoreUnicastMessages();
 
     }
   }

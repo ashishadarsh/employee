@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { addUnicastMessage } from '../../graphql/queries';
 import { Router } from '@angular/router';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-chat',
@@ -16,6 +17,7 @@ export class ChatComponent {
   @ViewChild('messagesContainer') messagesContainer!: ElementRef;
   id = input.required<string>();
   name = input.required<string>();
+  private destroy$ = new Subject<void>();
 
   messages: any[] = [];
   newMessage = '';
@@ -38,26 +40,36 @@ export class ChatComponent {
   }
 
   ngOnInit(): void {
-    this.dataService.employee$.subscribe(data => {
+    this.dataService.employee$.pipe(takeUntil(this.destroy$)).subscribe(data => {
       this.currentUser = data;
 
-      if (this.id()) { // make sure receiver ID exists
-        this.dataService.getUnicastMessages(this.id()).subscribe(messages => {
-          this.dataService.unicastMessages$.next(messages);
-          console.log('Fetched unicast messages:', messages);
-        });
+      if (this.id() !== this.dataService.receiverEmpId()) {
+        this.dataService.receiverEmpId.set(this.id());
       }
+
     });
 
     this.fetchMessages(); // subscribes to BehaviorSubject
   }
 
   fetchMessages() {
-    this.dataService.unicastMessages$.subscribe(data => {
+    this.dataService.unicastMessages$.pipe(takeUntil(this.destroy$)).subscribe(data => {
+      const shouldScroll = this.isScrolledToBottom();
       this.messages = data;
-      console.log('Unicast messages fetched:', this.messages);
+      if (shouldScroll) {
+        this.scrollToBottom();
+      }
     });
+
   }
+
+  private isScrolledToBottom(): boolean {
+    if (!this.messagesContainer) return false;
+
+    const { scrollTop, scrollHeight, clientHeight } = this.messagesContainer.nativeElement;
+    return scrollTop + clientHeight >= scrollHeight - 5;
+  }
+
 
   sendMessage() {
     if (this.newMessage.trim() && this.currentUser) {
@@ -74,11 +86,13 @@ export class ChatComponent {
   private scrollToBottom(): void {
     setTimeout(() => {
       if (this.messagesContainer) {
-        this.messagesContainer.nativeElement.scrollTop =
-          this.messagesContainer.nativeElement.scrollHeight;
+        const el = this.messagesContainer.nativeElement;
+
+        el.scrollTop = el.scrollHeight - el.clientHeight; // Ensures full scroll
       }
-    }, 0);
+    }, 100);
   }
+
 
   getInitials(fullName: string): string {
     if (!fullName) return '';
@@ -87,6 +101,11 @@ export class ChatComponent {
       return (parts[0][0] + parts[1][0]).toUpperCase();
     }
     return parts[0][0]?.toUpperCase() || '';
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
 }
