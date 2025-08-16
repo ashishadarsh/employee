@@ -136,7 +136,7 @@ export class AddTaskComponent implements OnInit {
       status: new FormControl(this.task?.status || '', Validators.required),
       type: new FormControl(this.task?.type || '', Validators.required),
       empId: new FormControl(
-        { value: this.task?.empId || this.emp._id, disabled: this.edit },
+        { value: this.task?.empId ? this.task.empId: this.emp._id, disabled: this.edit },
         Validators.required
       ),
       completionDate: new FormControl(this.task?.completionDate || null, Validators.required)
@@ -149,20 +149,25 @@ export class AddTaskComponent implements OnInit {
 
   onAddingTask() {
     this.loading = true;
-    if(this.task) {
-      this.addTaskForm.patchValue({ _id: this.task._id });
+
+    const formData = this.addTaskForm.getRawValue(); // includes disabled fields
+
+    if (this.task) {
+      formData._id = this.task._id;
     }
-    this.dataService.createTask(this.addTaskForm.value).subscribe(
+
+    this.dataService.createTask(formData).subscribe(
       response => {
         this.dataService.fetchAndStoreEmployeeTasks();
         this.router.navigate(['/tasks']);
-        this.loading = false
+        this.loading = false;
       },
       error => {
         console.error('Error saving task:', error);
-        this.loading = false
+        this.loading = false;
         this.router.navigate(['/tasks']);
       }
     );
   }
+
 }
