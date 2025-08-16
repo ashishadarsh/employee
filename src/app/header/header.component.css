@@ -85,7 +85,7 @@
 
 .chat-label .badge {
   position: absolute;
-  top: -0.4rem;  /* moves badge above text */
+  top: -0.25rem;  /* moves badge above text */
   right: -0.6rem; /* moves badge to the right corner */
   background-color: #ff3b3b;
   color: white;

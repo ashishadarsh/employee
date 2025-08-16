@@ -1,7 +1,7 @@
 import { Component, inject, input, OnInit } from '@angular/core';
 import { DataService } from '../../data.service';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { ActivatedRouteSnapshot, ResolveFn, RouterModule } from '@angular/router';
 import { Tag } from 'primeng/tag';
 import { Button } from 'primeng/button';
 
@@ -83,4 +83,18 @@ export class TaskComponent implements OnInit{
   }
 
 
+}
+
+export const resolveTaskTitle: ResolveFn<string> = (activatedRoute: ActivatedRouteSnapshot) => {
+  const taskId = activatedRoute.paramMap.get('taskId');
+  const dataService = inject(DataService);
+  let taskTitle = 'Unknown Task';
+  if(!taskId) {
+    taskTitle = 'Add Task';
+  }
+  dataService.tasks$.subscribe(tasks => {
+    const task = tasks.find((task: any) => task._id === taskId);
+    taskTitle =  task ? task.title : taskTitle;
+  })
+  return taskTitle;
 }
