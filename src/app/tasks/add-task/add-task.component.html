@@ -4,7 +4,7 @@
     <button type="button" class="btn-close" (click)="closePopup()">❌</button>
   </div>
 
-  <form (ngSubmit)="onAddingTask()" [formGroup]="addTaskForm" class="modern-form">
+  <form (ngSubmit)="onAddingTask()" [formGroup]="addTaskForm" class="modern-form" *ngIf="addTaskForm">
     <!-- Scrollable Content -->
     <div class="form-scrollable">
       <!-- Title -->
@@ -45,7 +45,7 @@
           <label for="teamMember">Assign To</label>
           <select id="teamMember" formControlName="empId">
             @for (teamMemberData of teamData; track $index) {
-              <option [value]="teamMemberData._id">{{ teamMemberData.firstName }}</option>
+              <option [value]="teamMemberData._id">{{ teamMemberData.firstName + ' '+ teamMemberData.lastName }}</option>
             }
           </select>
         </div>
@@ -72,7 +72,7 @@
     <!-- Fixed Buttons -->
     <div class="modal-buttons fixed-buttons">
       <button type="button" class="btn btn-secondary" (click)="closePopup()">Cancel</button>
-      <button type="submit" class="btn btn-success">Save</button>
+      <button type="submit" class="btn btn-success" [disabled]="!addTaskForm.valid || loading" >Save</button>
     </div>
   </form>
 </div>
