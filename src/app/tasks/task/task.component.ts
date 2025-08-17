@@ -4,10 +4,11 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRouteSnapshot, ResolveFn, RouterModule } from '@angular/router';
 import { Tag } from 'primeng/tag';
 import { Button } from 'primeng/button';
+import { NgxEditorModule } from 'ngx-editor';
 
 @Component({
   selector: 'app-task',
-  imports: [CommonModule, RouterModule, Tag, Button],
+  imports: [CommonModule, RouterModule, Tag, Button, NgxEditorModule],
   templateUrl: './task.component.html',
   styleUrl: './task.component.css'
 })
