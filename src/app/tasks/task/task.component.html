@@ -2,10 +2,15 @@
   <!-- Header -->
   <div class="task-header-modern">
     <h2>{{ task.title }}</h2>
-    <div class="task-badges">
+    <!-- <div class="task-badges">
       <p-tag [value]="task.type" [severity]="getSeverityType(task.type)" class="type"></p-tag>
       <p-tag [value]="task.status" [severity]="getSeverity(task.status)"></p-tag>
-    </div>
+    </div> -->
+  </div>
+
+  <div class="task-badges">
+    <p-tag [value]="task.type" [severity]="getSeverityType(task.type)" class="type"></p-tag>
+    <p-tag [value]="task.status" [severity]="getSeverity(task.status)"></p-tag>
   </div>
 
   <!-- Meta Info -->
@@ -27,8 +32,9 @@
   <!-- Scrollable Description -->
   <div class="task-body-modern scrollable">
     <h4>Description</h4>
-    <p>{{ task.description }}</p>
+    <div class="description-content" [innerHTML]="task.description"></div>
   </div>
+
 
   <!-- Fixed Actions -->
   <div class="task-actions-modern fixed-actions">

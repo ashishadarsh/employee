@@ -20,7 +20,16 @@
   background: #ffffff;
   border-radius: 12px;
   box-shadow: 0 4px 25px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  /* height: 100%; */
 }
+
+/* .form-body {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 8px;
+} */
 
 /* Floating Inputs */
 .form-floating {
@@ -54,7 +63,8 @@
   flex-direction: column;
 }
 
-.form-select-group select {
+.form-select-group select,
+input[type="date"] {
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   padding: 0.6rem 0.8rem;
@@ -63,7 +73,8 @@
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-.form-select-group select:focus {
+.form-select-group select:focus,
+input[type="date"]:focus {
   border-color: #4f46e5;
   box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
 }
@@ -73,12 +84,45 @@
   margin-bottom: 0.4rem;
 }
 
+/* Description Editor */
+.NgxEditor__Wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 250px;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  overflow: hidden; /* keep scroll inside */
+}
+
+/* Toolbar fixed at top */
+.NgxEditor__Wrapper ngx-editor-menu {
+  flex: 0 0 auto;
+  background: #f3f4f6;
+  border-bottom: 1px solid #e0e0e0;
+  padding: 4px;
+}
+
+.NgxEditor__Wrapper ngx-editor {
+  flex: 1 1 auto;
+  overflow-y: auto; /* only text area scrolls */
+  padding: 8px;
+}
+
 /* Buttons */
 .modal-buttons {
   display: flex;
   justify-content: flex-end;
   gap: 0.75rem;
 }
+
+/* .modal-buttons.fixed-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 1rem;
+  border-top: 1px solid #eee;
+  background: #fff;
+} */
 
 .btn {
   padding: 0.6rem 1.2rem;
@@ -118,63 +162,33 @@
   margin-bottom: 15px;
 }
 
-/* Date Input Styling (matches selects & text inputs) */
-input[type="date"] {
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  padding: 0.6rem 0.8rem;
-  font-size: 1rem;
-  background-color: #f9fafb;
-  transition: border-color 0.2s, box-shadow 0.2s;
-}
-
-input[type="date"]:focus {
-  border-color: #4f46e5;
-  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
-}
-
+/* Modal Container */
 .modern-modal {
+  /* display: flex;
+  flex-direction: column;
+  flex: 1;
+  background: #fff; */
   display: flex;
   flex-direction: column;
-  width: 70vw; /* 70% of screen */
-  max-width: 900px;
-  height: 650px; /* fixed height */
+  width: 95%;
+  max-width: 95%;
+  height: 735px; /* fixed height */
   margin: 0 auto;
   border-radius: 10px;
   background: #fff;
-  padding: 16px;
+  padding: 15px;
   box-shadow: 0 6px 20px rgba(0,0,0,0.1);
 }
-
 .modern-form {
   display: flex;
   flex-direction: column;
   height: 100%;
 }
-
-/* Scrollable form content */
-.form-scrollable {
-  flex: 1; /* take remaining space */
-  overflow-y: auto;
-  padding-right: 8px; /* avoid scrollbar overlap */
-}
-
-/* Make description scrollable */
-.description-container {
-  height: 150px; /* or adjust */
-}
-
-.scrollable-textarea {
-  height: 100%;
-  overflow-y: auto;
-  resize: none;
-}
-
 /* Fixed buttons at bottom */
 .fixed-buttons {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
-  padding-top: 10px;
-  border-top: 1px solid #eee; /* optional separator */
+  padding-top: 20px;
+  /* border-top: 1px solid #eee; */
 }

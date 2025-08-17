@@ -5,6 +5,7 @@ import { DataService } from '../../data.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { combineLatest, of } from 'rxjs';
+import { Editor, Toolbar, NgxEditorModule } from 'ngx-editor';
 
 function mustStartWithUppercaseAlphabet(control: AbstractControl) {
   const value = control.value;
@@ -28,7 +29,7 @@ export function forbiddenTitle(control: AbstractControl) {
 
 @Component({
   selector: 'app-add-task',
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, NgxEditorModule],
   templateUrl: './add-task.component.html',
   styleUrls: ['./add-task.component.css'],
   providers: [provideNativeDateAdapter()]
@@ -45,6 +46,19 @@ export class AddTaskComponent implements OnInit {
   public teamData: any;
   public addTaskForm!: FormGroup;
   public edit = false;
+  //editordoc = jsonDoc;
+
+  editor!: Editor;
+  toolbar: Toolbar = [
+    ['bold', 'italic'],
+    ['underline', 'strike'],
+    ['code', 'blockquote'],
+    ['ordered_list', 'bullet_list'],
+    [{ heading: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] }],
+    ['link', 'image'],
+    ['text_color', 'background_color'],
+    ['align_left', 'align_center', 'align_right', 'align_justify'],
+  ];
 
   statusOptions = [
     { value: '0', label: 'To Do' },
@@ -69,6 +83,7 @@ export class AddTaskComponent implements OnInit {
   constructor(private route: ActivatedRoute) {}
 
   ngOnInit(): void {
+    this.editor = new Editor();
     // Get taskId from route if editing
     this.taskId = this.route.snapshot.params['taskId'];
 
@@ -168,6 +183,10 @@ export class AddTaskComponent implements OnInit {
         this.router.navigate(['/tasks']);
       }
     );
+  }
+
+  ngOnDestroy() {
+    this.editor.destroy();
   }
 
 }
