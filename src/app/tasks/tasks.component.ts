@@ -77,6 +77,8 @@ export class TasksComponent implements OnInit {
   }
 
   fetchTasks(archive: string) {
+    console.log('Fetching tasks with archive:', archive);
+
     this.loading = true;
     this.dataService.tasks$
       .pipe(
@@ -94,7 +96,6 @@ export class TasksComponent implements OnInit {
             originalTitle: task.title,
             title: this.truncateString(task.title)
           }));
-
           this.statusOptions = [...new Set(this.tasks.map(task => task.status))];
           this.loading = false;
         },
@@ -104,6 +105,30 @@ export class TasksComponent implements OnInit {
           this.loading = false;
         }
       );
+  }
+
+  togglePriority(task, event) {
+   this.dataService.createTask({ ...task, priority: !task.priority }).subscribe({
+      next: () => {
+        task.priority = !task.priority;
+        this.dataService.fetchAndStoreEmployeeTasks();
+      },
+      error: () => {
+        this.error = 'Failed to update task priority.';
+      }
+    });
+  }
+
+  togglePin(task, event) {
+    this.dataService.createTask({...task, pinned: !task.pinned}).subscribe({
+      next: () => {
+        task.pinned = !task.pinned;
+        this.dataService.fetchAndStoreEmployeeTasks();
+      },
+      error: () => {
+        this.error = 'Failed to update task pinned state.';
+      }
+    });
   }
 
 

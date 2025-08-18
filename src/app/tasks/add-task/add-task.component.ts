@@ -120,9 +120,6 @@ export class AddTaskComponent implements OnInit {
           this.title = 'Add Task';
           //this.teamData = teamData.filter(d => d._id !== this.emp._id);
         }
-
-        console.log('task Data:', this.task);
-
         // Initialize form
         this.initializeForm();
 

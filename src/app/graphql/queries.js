@@ -119,8 +119,6 @@ export async function getUnicastMessages(senderEmpId, receiverEmpId) {
     variables: { senderEmpId, receiverEmpId },
     fetchPolicy: 'network-only',
   });
-  console.log("Unicast Messages: ", data);
-
   return data.UnicastMessages;
 }
 
@@ -193,7 +191,7 @@ export async function getEmployeesByTeam(team) {
   return data.getEmployeesByTeam;
 }
 
-export async function createNewTask({_id, title, description, empId, completionDate, status, type}) {
+export async function createNewTask({_id, title, description, empId, completionDate, status, type, priority, pinned}) {
   const mutation = gql`
     mutation createTask($input: createTaskInput!) {
       createTaskForEmployee(input: $input) {
@@ -216,7 +214,9 @@ export async function createNewTask({_id, title, description, empId, completionD
     empId,
     completionDate,
     status,
-    type
+    type,
+    priority,
+    pinned
   } },
   });
   return data.createTaskForEmployee;

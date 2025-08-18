@@ -65,7 +65,7 @@
 
     <ng-template #header>
         <tr>
-            <th pSortableColumn="name" style="width:32%">
+            <th pSortableColumn="name" style="width:35%; padding-left: 72px;">
                 <div class="flex items-center gap-2">
                     Title
                     <p-sortIcon field="name" />
@@ -107,6 +107,38 @@
     <ng-template #body let-task>
         <tr [pSelectableRow]="task">
           <td>
+            <div class="task-icons">
+              <div>
+                <i
+                class="pi pi-thumbtack"
+                [ngClass]="{ 'active-pin': task.pinned }"
+                title="Pinned Task"
+                (click)="togglePin(task, $event)">
+
+              </i>
+
+              <!-- Priority icon -->
+              <i
+                class="pi pi-flag"
+                [ngClass]="{ 'active-priority': task.priority }"
+                title="Priority Task"
+                (click)="togglePriority(task, $event)">
+
+              </i>
+              </div>
+             <div [routerLink]="['/tasks', task._id]"
+             (click)="$event.stopPropagation()" style="flex: 1;">
+              <a
+              style="cursor: pointer; text-decoration: none; color: forestgreen; font: caption;"
+              [title]="task.originalTitle || task.title"
+            >
+              {{ task.title }}
+            </a>
+             </div>
+
+          </div>
+          </td>
+          <!-- <td>
             <a
               [routerLink]="['/tasks', task._id]"
               (click)="$event.stopPropagation()"
@@ -115,7 +147,7 @@
             >
               {{ task.title }}
             </a>
-          </td>
+          </td> -->
 
           <td>
             <p-tag [value]="task.type" [severity]="getSeverityType(task.type)" />
@@ -123,9 +155,6 @@
             <td>
               <p-tag [value]="task.status" [severity]="getSeverity(task.status)" />
           </td>
-            <!-- <td>
-              {{ task.description }}
-            </td> -->
             <td>
                 {{ task.completionDate }}
             </td>
@@ -144,23 +173,6 @@
 
         </tr>
     </ng-template>
-
-    <!-- <ng-template #body let-task>
-      <tr [pSelectableRow]="task">
-          <td>
-              {{ task.title }}
-          </td>
-          <td>
-              <p-tag [value]="task.status" [severity]="getSeverity(task.status)" />
-          </td>
-          <td>
-              {{ task.completionDate }}
-          </td>
-          <td>
-              {{ task.assignedDate }}
-          </td>
-      </tr>
-  </ng-template> -->
     <ng-template emptymessage>
         <tr>
             <td colspan="4">No customers found.</td>

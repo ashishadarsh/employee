@@ -158,3 +158,29 @@ p-iconfield {
     margin: 20px auto;
   }
 }
+
+.task-icons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.task-icons i {
+  cursor: pointer;
+  font-size: 1.2rem;
+  color: gray; /* default unfilled */
+  transition: 0.2s;
+  margin-right: 5px;
+}
+
+/* Filled effect when true */
+.task-icons i.active-pin {
+  color: dodgerblue;
+  text-shadow: 0 0 0 dodgerblue;
+}
+
+.task-icons i.active-priority {
+  color: red;
+  text-shadow: 0 0 0 red;
+}
+
