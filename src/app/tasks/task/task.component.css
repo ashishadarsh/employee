@@ -69,7 +69,10 @@
   flex: 1 1 auto;         /* take remaining height */
   overflow-y: auto;       /* scroll only body */
   padding-right: 8px;
-  margin-bottom: 1rem;    /* gap before buttons */
+  margin-bottom: 1rem;
+  scrollbar-width: thin;  /* Firefox */
+  scrollbar-color: rgba(0, 0, 0, 0.2) transparent; /* Firefox */
+  max-height: 405px;
 }
 
 .task-body-modern h4 {
