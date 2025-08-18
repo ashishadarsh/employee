@@ -1,4 +1,4 @@
-import { Component, input, OnInit } from '@angular/core';
+import { Component, input, OnInit, ViewChild } from '@angular/core';
 import { DataService } from '../data.service';
 import { ActivatedRoute, NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -30,6 +30,9 @@ export class TasksComponent implements OnInit {
   childRouteActive = false;
   archive = input<any>();
   public searchTerm: string = '';
+  public taskItems: any[] = [];
+  @ViewChild('taskMenu') taskMenu: any;
+  // items: MenuItem[];
 
   constructor(private dataService: DataService, private router: Router, private route: ActivatedRoute) {
     this.router.events
@@ -42,6 +45,35 @@ export class TasksComponent implements OnInit {
   ngOnInit(): void {
       this.fetchTasks(this.archive()); // Pass to fetchTasks
 
+  }
+
+  setTaskMenu(task: any) {
+    this.taskItems = [
+      {
+        label: 'View Details',
+        icon: 'pi pi-eye',
+        command: () => this.router.navigate(['/tasks', task._id])
+      },
+      {
+        label: 'Edit',
+        icon: 'pi pi-pencil',
+        command: () => this.router.navigate(['/tasks/edit', task._id])
+      },
+      {
+        label: 'Delete',
+        icon: 'pi pi-trash',
+        command: () => this.dataService.deleteTask(task._id).subscribe({
+          next: () => {
+            this.tasks = this.tasks.filter(t => t._id !== task._id);
+            this.statusOptions = [...new Set(this.tasks.map(t => t.status))];
+          },
+          error: () => {
+            this.error = 'Failed to delete task.';
+          }
+        })
+
+      }
+    ];
   }
 
   fetchTasks(archive: string) {

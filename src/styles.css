@@ -4,5 +4,26 @@
 /* @import '~bootstrap/dist/css/bootstrap.min.css'; */
 /* esbuild --external:employee/node_modules/bootstrap/dist/css/bootstrap.min.css */
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+/* Reset */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  box-sizing: border-box;
+}
+
+/* Wrapper that pushes all pages below header */
+.page-wrapper {
+  padding-top: 60px;             /* equal to header height */
+  min-height: 100vh;             /* full viewport */
+  overflow-y: auto;              /* page scroll inside wrapper */
+  background-color: #f9f9f9;
+  box-sizing: border-box;
+}
+
+/* Optional: make all routed components fill width */
+.page-wrapper > * {
+  width: 100%;
+  box-sizing: border-box;
+}

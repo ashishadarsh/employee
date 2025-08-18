@@ -65,43 +65,42 @@
 
     <ng-template #header>
         <tr>
-            <th pSortableColumn="name" style="width:36%">
+            <th pSortableColumn="name" style="width:32%">
                 <div class="flex items-center gap-2">
                     Title
                     <p-sortIcon field="name" />
                 </div>
             </th>
-            <th pSortableColumn="type" style="width:15%">
+            <th pSortableColumn="type" style="width:16%">
               <div class="flex items-center gap-2">
                   Type
                   <p-sortIcon field="type" />
               </div>
           </th>
-            <th pSortableColumn="type" style="width:15%">
+            <th pSortableColumn="type" style="width:16%">
               <div class="flex items-center gap-2">
                   Status
                   <p-sortIcon field="type" />
               </div>
           </th>
-            <!-- <th pSortableColumn="country.name" style="width:25%">
-                <div class="flex items-center gap-2">
-                    Description
-                    <p-sortIcon field="country.name" />
-                </div>
-            </th> -->
-            <th pSortableColumn="completionDate" style="width:17%">
+            <th pSortableColumn="completionDate" style="width:15%">
               <div class="flex items-center gap-2">
                 Completion Date
                 <p-sortIcon field="completionDate" />
               </div>
             </th>
 
-            <th pSortableColumn="assignedDate" style="width:17%">
+            <th pSortableColumn="assignedDate" style="width:15%">
               <div class="flex items-center gap-2">
                 Assigned Date
                 <p-sortIcon field="assignedDate" />
               </div>
             </th>
+            <th style="width:15%">
+              <div class="flex items-center gap-2">
+                  Actions
+              </div>
+          </th>
 
         </tr>
     </ng-template>
@@ -133,9 +132,19 @@
             <td>
                 {{ task.assignedDate }}
             </td>
+            <td>
+                <p-menu #taskMenu [popup]="true" [model]="taskItems" appendTo="body"></p-menu>
+                  <p-button
+                      icon="pi pi-ellipsis-v"
+                      styleClass="p-button-text"
+                      (click)="setTaskMenu(task); taskMenu.toggle($event)"
+                      [title]="'Actions for ' + task.title"
+                  ></p-button>
+                </td>
 
         </tr>
     </ng-template>
+
     <!-- <ng-template #body let-task>
       <tr [pSelectableRow]="task">
           <td>

@@ -1,17 +1,18 @@
 /* Navbar Container */
 .navbar-modern {
-  width: 100%;
-  background: linear-gradient(90deg, #c0a9c7, #d6c2d9);
-  padding: 1rem 2rem; /* taller navbar */
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
+  right: 0;
+  height: 60px; /* or your desired height */
+  background: linear-gradient(90deg, #c0a9c7, #d6c2d9);
   z-index: 1000;
-  font-family: 'Roboto', sans-serif;
-  min-height: 60px;
   display: flex;
   align-items: center;
+  padding: 1rem 2rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
 }
+
 
 /* Inner container for spacing and alignment */
 .navbar-container {

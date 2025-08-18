@@ -5,8 +5,10 @@ import { AuthComponent } from './auth/auth.component';
 import { AuthGuard } from './auth/auth.guard';
 import { BrandingComponent } from './branding/branding.component';
 import {routes as userRoutes} from './tasks/tasks.routes';
+import { routes as chatRoutes } from './chat/chat.routes';
 import { ProfileComponent } from './profile/profile.component';
 import { resolveUserName } from './app.component';
+import { ChatListComponent } from './chat/chat-list/chat-list.component';
 
 // export const routes: Routes = [
 //   {path: '', component: BrandingComponent},
@@ -31,9 +33,16 @@ export const routes: Routes = [
     title: 'Tasks'
   },
   { path: 'dashboard', loadComponent: () => import('./dashboard/dashboard.component').then(mod => mod.DashboardComponent), canActivate: [AuthGuard], title: 'Dashboard' },
-  { path: 'chat', loadComponent: () => import('./chat/chat-all/chat-all.component').then(mod => mod.ChatAllComponent), canActivate: [AuthGuard], title: 'Team Chat' },
+  //{ path: 'chat', loadComponent: () => import('./chat/chat-all/chat-all.component').then(mod => mod.ChatAllComponent), canActivate: [AuthGuard], title: 'Team Chat' },
+  {
+    path: 'chat',
+    component: ChatListComponent,
+    canActivate: [AuthGuard],
+    title: 'Chat',
+    children: chatRoutes
+  },
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard], title: 'Team' , children: [
-    { path: 'chat/:id/:name', loadComponent: () => import('./chat/chat/chat.component').then(mod => mod.ChatComponent), canActivate: [AuthGuard], title: resolveUserName },
+    { path: 'chat/user/:id/:name', loadComponent: () => import('./chat/chat/chat.component').then(mod => mod.ChatComponent), canActivate: [AuthGuard], title: resolveUserName },
   ] },
   {path: '**', redirectTo: '/', pathMatch: 'full'}
 ];

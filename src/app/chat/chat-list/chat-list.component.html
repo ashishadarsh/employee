@@ -1,0 +1,37 @@
+<div class="chat-container">
+  <!-- Left Sidebar -->
+  <div class="chat-sidebar">
+    <div class="chat-list-container">
+
+      <div class="chat-item" [routerLink]="['chat-all']"
+      routerLinkActive="active-chat">
+        <div class="avatar-small">
+          <span class="pi pi-user"></span>
+        </div>
+        <div class="chat-user-info">
+          <span class="employee-name">Organisation</span>
+        </div>
+      </div>
+
+      <div
+        *ngFor="let item of teamData"
+        class="chat-item"
+        [routerLink]="['/chat', item._id, item.firstName + ' ' + item.lastName]"
+        routerLinkActive="active-chat"
+      >
+        <div class="avatar-small">
+          {{ item.firstName.charAt(0) }}{{ item.lastName.charAt(0) }}
+        </div>
+        <div class="chat-user-info">
+          <span class="employee-name">{{ item.firstName }} {{ item.lastName }}</span>
+          <span class="employee-role">{{ item.designation }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right Side Chat -->
+  <div class="chat-content">
+    <router-outlet></router-outlet>
+  </div>
+</div>
