@@ -66,8 +66,23 @@
 
     <!-- Fixed Buttons -->
     <div class="modal-buttons fixed-buttons">
-      <button type="button" class="btn btn-secondary" (click)="closePopup()">Cancel</button>
-      <button type="submit" class="btn btn-success" [disabled]="!addTaskForm.valid || loading">Save</button>
+      <p-button
+        label="Cancel"
+        icon="pi pi-arrow-left"
+        variant="outlined"
+        styleClass="p-button-danger"
+        [raised]="true"
+        (click)="closePopup()"
+      ></p-button>
+      <p-button
+        label="Save"
+        icon="pi pi-save"
+        variant="outlined"
+        styleClass="p-button-success"
+        type="submit"
+        [raised]="true"
+        [disabled]="!addTaskForm.valid || loading"
+      ></p-button>
     </div>
   </form>
 </div>

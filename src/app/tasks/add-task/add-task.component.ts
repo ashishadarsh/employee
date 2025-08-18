@@ -6,6 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { combineLatest, of } from 'rxjs';
 import { Editor, Toolbar, NgxEditorModule } from 'ngx-editor';
+import { Button } from 'primeng/button';
 
 function mustStartWithUppercaseAlphabet(control: AbstractControl) {
   const value = control.value;
@@ -29,7 +30,7 @@ export function forbiddenTitle(control: AbstractControl) {
 
 @Component({
   selector: 'app-add-task',
-  imports: [ReactiveFormsModule, CommonModule, NgxEditorModule],
+  imports: [ReactiveFormsModule, CommonModule, NgxEditorModule, Button],
   templateUrl: './add-task.component.html',
   styleUrls: ['./add-task.component.css'],
   providers: [provideNativeDateAdapter()]

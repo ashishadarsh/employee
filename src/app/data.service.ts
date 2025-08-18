@@ -1,6 +1,6 @@
 import { effect, inject, Injectable, signal } from '@angular/core';
 import { BehaviorSubject, EMPTY, Observable, from } from 'rxjs';
-import { getEmployee, getEmployeeTasks, getEmployeesByTeam, getMessages, messgeAddedSubscription, createNewTask, getUnicastMessages, unicastMessageAddedSubscription } from './graphql/queries';
+import { getEmployee, getEmployeeTasks, getEmployeesByTeam, getMessages, messgeAddedSubscription, createNewTask, getUnicastMessages, unicastMessageAddedSubscription, deleteTask } from './graphql/queries';
 import { ApolloClient } from '@apollo/client/core';
 
 @Injectable({
@@ -94,6 +94,9 @@ export class DataService {
     return from(createNewTask(taskData));
   }
 
+  deleteTask(taskId: string): Observable<any> {
+    return from(deleteTask(taskId));
+  }
 
   // Fetch and store data
   fetchAndStoreEmployeeData() {

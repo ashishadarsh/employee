@@ -188,7 +188,21 @@ input[type="date"]:focus {
 .fixed-buttons {
   display: flex;
   justify-content: flex-end;
-  gap: 10px;
+  gap: 20px;
   padding-top: 20px;
   /* border-top: 1px solid #eee; */
+}
+
+.taskFormButton {
+  display: flex;
+  cursor: pointer;
+}
+
+span {
+  flex: 1;
+  /* margin: 10px 10px 0px 0px; */
+}
+
+.taskFormButton {
+  flex: 1
 }

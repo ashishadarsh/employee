@@ -39,15 +39,20 @@
   <!-- Fixed Actions -->
   <div class="task-actions-modern fixed-actions">
     <p-button
-      label="Edit"
-      [routerLink]="['/tasks/edit', task._id]"
-      severity="info"
-    ></p-button>
-
-    <p-button
       label="Back"
       routerLink="/tasks"
-      severity="secondary"
+      icon="pi pi-arrow-left"
+      styleClass="p-button-secondary"
+      [raised]="true"
+    ></p-button>
+    <p-button
+      label="Edit"
+      [routerLink]="['/tasks/edit', task._id]"
+      icon="pi pi-pencil"
+      variant="outlined"
+      styleClass="p-button-info"
+      [raised]="true"
+      severity="info"
     ></p-button>
   </div>
 </div>

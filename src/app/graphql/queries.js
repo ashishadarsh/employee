@@ -138,6 +138,8 @@ export async function getEmployeeTasks(empId) {
         title
         description
         type
+        pinned
+        priority
       }
     }
   `;
@@ -158,6 +160,22 @@ export async function getEmployee(empId) {
 
   const {data} = await apolloClient.query({query, variables:{empId}});
   return data.employee;
+}
+
+export async function deleteTask(id) {
+  const mutation = gql`
+    mutation deleteTask($id: ID!) {
+      deleteTask(id: $id) {
+        _id
+      }
+    }
+  `;
+
+  const { data } = await apolloClient.mutate({
+    mutation,
+    variables: { id },
+  });
+  return data.deleteTask;
 }
 
 export async function getEmployeesByTeam(team) {

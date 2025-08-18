@@ -86,6 +86,7 @@
   flex-direction: column;
   border-radius: 8px;
   overflow: hidden; /* keep border-radius with scroll */
+  padding-top: 7px;
 }
 
 /* ------------------------ Search + Actions ------------------------ */

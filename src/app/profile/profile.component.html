@@ -64,7 +64,7 @@
         <div class="avatar-small">{{ item.firstName.charAt(0) }}{{ item.lastName.charAt(0) }}</div>
         <span class="employee-name-with-icon">
           <a
-            [routerLink]="['/profile/chat', item._id, item.firstName + ' ' + item.lastName]"
+            [routerLink]="['/profile/chat/user', item._id, item.firstName + ' ' + item.lastName]"
             routerLinkActive="router-link-active"
             class="message-icon-link"
             title="Message {{ item.firstName }}"

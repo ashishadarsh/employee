@@ -1,36 +1,27 @@
-<div class="chatbox-container">
-  <!-- Header -->
-  <div class="chatbox-header">
+<div class="chat-window">
+  <!-- Fixed Header -->
+  <div class="chat-header">
     <div class="chat-user-info">
       <div class="chat-avatar">
-        <span class="pi pi-user"></span>
+        {{ getInitials(name()) }}
       </div>
-      <span class="chat-user-name">Organisation</span>
+      <span class="chat-user-name">{{ name() }}</span>
     </div>
   </div>
 
-
-
-  <!-- Messages -->
+  <!-- Scrollable Messages -->
   <div class="chatbox-messages" #messagesContainer>
     <div *ngFor="let message of messages"
          class="chat-message"
          [ngClass]="{'current-user': message.senderName === currentUser?.firstName}">
-
       <div class="message-bubble">
-        <!-- Sender name for others -->
-        <span class="sender-name" *ngIf="message.senderName !== currentUser?.firstName">
-          {{ message.senderName }}
-        </span>
-
-        <span class="message-text">{{ message.text }}</span>
+        <span class="message">{{ message.text }}</span>
         <span class="timestamp">{{ message.date | date: 'shortTime' }}</span>
       </div>
-
     </div>
   </div>
 
-  <!-- Input -->
+  <!-- Fixed Input -->
   <div class="chatbox-input">
     <input
       type="text"

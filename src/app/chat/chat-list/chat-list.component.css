@@ -1,0 +1,111 @@
+.chat-container {
+  display: flex;
+  height: calc(100vh - 60px);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  /* overflow-y: unset; */
+}
+
+/* Sidebar */
+.chat-sidebar {
+  width: 30%;
+  max-width: 350px;
+  background: #ffffff;
+  border-right: 1px solid #e0e0e0;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+/* Chat list container */
+.chat-list-container {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Each chat item */
+.chat-item {
+  display: flex;
+  align-items: center;
+  padding: 14px 16px;
+  border-bottom: 1px solid #f0f0f0;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.chat-item:hover {
+  background: #f5f6f6;
+}
+
+.active-chat {
+  background: #e7f3ff;
+}
+
+/* Avatar */
+.avatar-small {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #818984; /* WhatsApp green */
+  color: #fff;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  margin-right: 14px;
+}
+
+/* Chat info */
+.chat-user-info {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.employee-name {
+  font-weight: 500;
+  font-size: 15px;
+  color: #111;
+  margin-bottom: 2px;
+  font-family: sans-serif;
+}
+
+.employee-role {
+  font-size: 13px;
+  color: #777;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Right Chat Content */
+.chat-content {
+  flex: 1;
+  background: #ece5dd; /* WhatsApp chat bg */
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow-y: auto;
+}
+
+/* Add subtle shadows */
+.chat-sidebar,
+.chat-content {
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.05);
+}
+
+.active-chat {
+  background: #eaeaea;
+  border-left: 4px solid #25d366; /* WhatsApp green left border */
+}
+
+/* Active chat name bold */
+.active-chat .employee-name {
+  font-weight: 500;
+  color: #000;
+}
+
+/* Keep hover effect consistent */
+.chat-item:hover:not(.active-chat) {
+  background: #f5f6f6;
+}
