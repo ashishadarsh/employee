@@ -71,6 +71,11 @@
                     <p-sortIcon field="name" />
                 </div>
             </th>
+            <th style="width:5%">
+              <div class="flex items-center gap-2">
+
+              </div>
+          </th>
             <th pSortableColumn="type" style="width:16%">
               <div class="flex items-center gap-2">
                   Type
@@ -96,11 +101,6 @@
                 <p-sortIcon field="assignedDate" />
               </div>
             </th>
-            <th style="width:15%">
-              <div class="flex items-center gap-2">
-                  Actions
-              </div>
-          </th>
 
         </tr>
     </ng-template>
@@ -138,6 +138,15 @@
 
           </div>
           </td>
+          <td>
+            <p-menu #taskMenu [popup]="true" [model]="taskItems" appendTo="body"></p-menu>
+              <p-button
+                icon="pi pi-ellipsis-v"
+                styleClass="p-button-text"
+                (click)="setTaskMenu(task); taskMenu.toggle($event)"
+                [title]="'Actions for ' + task.title"
+            ></p-button>
+          </td>
           <!-- <td>
             <a
               [routerLink]="['/tasks', task._id]"
@@ -161,15 +170,7 @@
             <td>
                 {{ task.assignedDate }}
             </td>
-            <td>
-                <p-menu #taskMenu [popup]="true" [model]="taskItems" appendTo="body"></p-menu>
-                  <p-button
-                      icon="pi pi-ellipsis-v"
-                      styleClass="p-button-text"
-                      (click)="setTaskMenu(task); taskMenu.toggle($event)"
-                      [title]="'Actions for ' + task.title"
-                  ></p-button>
-                </td>
+
 
         </tr>
     </ng-template>
