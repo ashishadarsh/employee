@@ -18,7 +18,7 @@ function mustStartWithUppercaseAlphabet(control: AbstractControl) {
 
 export function forbiddenTitle(control: AbstractControl) {
   const value = control.value;
-  const forbiddenWords = ['test', 'demo'];
+  const forbiddenWords = [];
 
   if (value) {
     const lowerValue = value.toLowerCase();
@@ -143,7 +143,7 @@ export class AddTaskComponent implements OnInit {
         updateOn: 'change'
       }),
       description: new FormControl(this.task?.description || '', {
-        validators: [Validators.required, Validators.minLength(10)],
+        validators: [Validators.required, Validators.minLength(5)],
         updateOn: 'change'
       }),
       status: new FormControl(this.task?.status || '', Validators.required),
