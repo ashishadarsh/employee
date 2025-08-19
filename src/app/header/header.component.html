@@ -6,17 +6,27 @@
     <!-- Center: Links -->
     <ul class="navbar-links">
       <li *ngIf="isAuthenticated.value">
-        <a routerLink="/dashboard" routerLinkActive="active-link">Dashboard</a>
+        <a routerLink="/dashboard" routerLinkActive="active-link">
+          <span class="pi pi-chart-bar"></span>
+          Dashboard
+        </a>
       </li>
       <li *ngIf="isAuthenticated.value">
-        <a routerLink="/profile" routerLinkActive="active-link">Profile</a>
+        <a routerLink="/profile" routerLinkActive="active-link">
+          <span class="pi pi-users"></span>
+          Profile
+        </a>
       </li>
       <li *ngIf="isAuthenticated.value">
-        <a routerLink="/tasks" routerLinkActive="active-link">Tasks</a>
+        <a routerLink="/tasks" routerLinkActive="active-link">
+          <span class="pi pi-clock"></span>
+          Tasks
+        </a>
       </li>
       <li *ngIf="isAuthenticated.value" class="chat-link">
         <a routerLink="/chat" routerLinkActive="active-link">
           <span class="chat-label">
+            <span class="pi pi-inbox" style="margin-right: 2px;"></span>
             Chat
             <span class="badge">15</span>
           </span>
@@ -24,13 +34,19 @@
       </li>
 
       <li *ngIf="!isAuthenticated.value">
-        <a routerLink="/auth" routerLinkActive="active-link">Authenticate</a>
+        <a routerLink="/auth" routerLinkActive="active-link">
+          <span class="pi pi-lock-open" style="margin-right: 2px;"></span>
+          Authenticate
+        </a>
       </li>
     </ul>
 
     <!-- Right: Logout -->
     <div class="navbar-actions">
-      <a *ngIf="isAuthenticated.value" (click)="logout()" class="logout-link">Logout</a>
+      <a *ngIf="isAuthenticated.value" (click)="logout()" class="logout-link">
+        <span class="pi pi-lock" style="margin-right: 2px;"></span>
+        Logout
+      </a>
     </div>
   </div>
 </nav>
