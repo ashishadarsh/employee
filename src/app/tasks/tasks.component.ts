@@ -31,6 +31,8 @@ export class TasksComponent implements OnInit {
   archive = input<any>();
   public searchTerm: string = '';
   public taskItems: any[] = [];
+  public activeIndex: number = 0;
+
   @ViewChild('taskMenu') taskMenu: any;
   // items: MenuItem[];
 
@@ -42,10 +44,96 @@ export class TasksComponent implements OnInit {
       });
   }
 
-  ngOnInit(): void {
-      this.fetchTasks(this.archive()); // Pass to fetchTasks
+  // ngOnInit(): void {
+  //     this.fetchTasks(this.archive()); // Pass to fetchTasks
 
+  // }
+
+  ngOnInit(): void {
+    if (this.router.url.includes('archive')) {
+      this.activeIndex = 1; // Archived
+    } else if (this.router.url.includes('backlog')) {
+      this.activeIndex = 2; // Backlog
+    } else {
+      this.activeIndex = 0; // Active
+    }
+
+    this.fetchTasks(this.activeIndex);
   }
+
+
+  // setTaskMenu(task: any) {
+  //   this.taskItems = [
+  //     {
+  //       label: 'View Details',
+  //       icon: 'pi pi-eye',
+  //       command: () => this.router.navigate(['/tasks', task._id])
+  //     },
+  //     {
+  //       label: 'Edit',
+  //       icon: 'pi pi-pencil',
+  //       command: () => this.router.navigate(['/tasks/edit', task._id])
+  //     },
+  //     {
+  //       label: 'Move to Backlog',
+  //       icon: 'pi pi-pencil',
+  //       command: () => this.dataService.createTask({ ...task, backlog: task.backlog ?  !task.backlog : true}).subscribe({
+  //         next: () => {
+  //           task.backlog = !task.backlog;
+  //           this.dataService.fetchAndStoreEmployeeTasks();
+  //         },
+  //         error: () => {
+  //           this.error = 'Failed to move task to backlog.';
+  //         }
+  //       })
+  //     },
+  //     {
+  //       label: 'Delete',
+  //       icon: 'pi pi-trash',
+  //       command: () => this.dataService.deleteTask(task._id).subscribe({
+  //         next: () => {
+  //           this.tasks = this.tasks.filter(t => t._id !== task._id);
+  //           this.statusOptions = [...new Set(this.tasks.map(t => t.status))];
+  //         },
+  //         error: () => {
+  //           this.error = 'Failed to delete task.';
+  //         }
+  //       })
+
+  //     }
+  //   ];
+  // }
+
+  // fetchTasks(archive: string) {
+  //   console.log('Fetching tasks with archive:', archive);
+
+  //   this.loading = true;
+  //   this.dataService.tasks$
+  //     .pipe(
+  //       filter((tasks): tasks is any[] => Array.isArray(tasks)),
+  //     )
+  //     .subscribe(
+  //       (tasks: any[]) => {
+  //         // Filter based on archive value
+  //         const filteredTasks = tasks.filter(task =>
+  //           archive ? task.status === 'Done' : task.status !== 'Done'
+  //         );
+
+  //         this.tasks = filteredTasks.map(task => ({
+  //           ...task,
+  //           originalTitle: task.title,
+  //           title: this.truncateString(task.title)
+  //         }));
+  //         this.statusOptions = [...new Set(this.tasks.map(task => task.status))];
+  //         this.loading = false;
+  //       },
+  //       error => {
+  //         this.tasks = [];
+  //         this.error = 'Failed to load employee tasks.';
+  //         this.loading = false;
+  //       }
+  //     );
+  // }
 
   setTaskMenu(task: any) {
     this.taskItems = [
@@ -60,6 +148,23 @@ export class TasksComponent implements OnInit {
         command: () => this.router.navigate(['/tasks/edit', task._id])
       },
       {
+        label: task.backlog ? 'Move to Active' : 'Move to Backlog',
+        icon: task.backlog ? 'pi pi-check-circle' : 'pi pi-arrow-left',
+        command: () => {
+          this.dataService.createTask({ ...task, backlog: !task.backlog }).subscribe({
+            next: () => {
+              task.backlog = !task.backlog; // flip backlog
+              this.dataService.fetchAndStoreEmployeeTasks();
+            },
+            error: () => {
+              this.error = task.backlog
+                ? 'Failed to move task to Active.'
+                : 'Failed to move task to Backlog.';
+            }
+          });
+        }
+      },
+      {
         label: 'Delete',
         icon: 'pi pi-trash',
         command: () => this.dataService.deleteTask(task._id).subscribe({
@@ -71,32 +176,36 @@ export class TasksComponent implements OnInit {
             this.error = 'Failed to delete task.';
           }
         })
-
       }
     ];
   }
 
-  fetchTasks(archive: string) {
-    console.log('Fetching tasks with archive:', archive);
 
+  fetchTasks(tabIndex: number) {
     this.loading = true;
     this.dataService.tasks$
-      .pipe(
-        filter((tasks): tasks is any[] => Array.isArray(tasks)),
-      )
+      .pipe(filter((tasks): tasks is any[] => Array.isArray(tasks)))
       .subscribe(
         (tasks: any[]) => {
-          // Filter based on archive value
-          const filteredTasks = tasks.filter(task =>
-            archive ? task.status === 'Done' : task.status !== 'Done'
-          );
+          let filteredTasks: any[] = [];
+
+          if (tabIndex === 0) {
+            // Active → status not Done and not backlog
+            filteredTasks = tasks.filter(task => task.status !== 'Done' && !task.backlog);
+          } else if (tabIndex === 1) {
+            // Archived → status Done
+            filteredTasks = tasks.filter(task => task.status === 'Done');
+          } else if (tabIndex === 2) {
+            // Backlog → backlog true
+            filteredTasks = tasks.filter(task => task.backlog);
+          }
 
           this.tasks = filteredTasks.map(task => ({
             ...task,
             originalTitle: task.title,
             title: this.truncateString(task.title)
           }));
-          this.statusOptions = [...new Set(this.tasks.map(task => task.status))];
+          this.statusOptions = [...new Set(this.tasks.map(t => t.status))];
           this.loading = false;
         },
         error => {
@@ -106,6 +215,7 @@ export class TasksComponent implements OnInit {
         }
       );
   }
+
 
   togglePriority(task, event) {
    this.dataService.createTask({ ...task, priority: !task.priority }).subscribe({
@@ -156,11 +266,12 @@ export class TasksComponent implements OnInit {
             return 'warn';
 
         case 'Analyse':
-            return null;
+            return 'secondary';
         default:
-            return null;
+            return 'contrast';
     }
 }
+
 
 getSeverityType(status: string) {
   switch (status) {
@@ -168,18 +279,18 @@ getSeverityType(status: string) {
           return 'danger';
 
       case 'Research':
-          return 'success';
+          return 'info';
 
       case 'Feature':
-          return 'info';
+          return 'success';
 
       case 'BugFix':
           return 'warn';
 
       case 'Update':
-          return null;
+          return 'warn';
       default:
-          return null;
+          return 'contrast';
   }
 }
 
@@ -197,9 +308,41 @@ get filteredTasks() {
   );
 }
 
+  // onTabChange(event: any) {
+  //   const index = event.index;
+  //   this.router.navigate([index === 0 ? '/tasks' : '/tasks/history/archive']);
+  // }
+
   onTabChange(event: any) {
     const index = event.index;
-    this.router.navigate([index === 0 ? '/tasks' : '/tasks/history/archive']);
+    this.activeIndex = index;
+
+    if (index === 0) {
+      this.router.navigate(['/tasks']); // Active
+    } else if (index === 1) {
+      this.router.navigate(['/tasks/history/archive']); // Archived
+    } else if (index === 2) {
+      this.router.navigate(['/tasks/backlog']); // Backlog
+    }
+
+    this.fetchTasks(index);
   }
 
+
+  getTaskStatus(taskId: string) {
+    const task = this.tasks.find(t => t._id === taskId && t.status !== 'Done');
+    if (!task) return null;
+
+    const currentDate = new Date();
+    const dueDate = new Date(task.completionDate);
+    const diff = Math.ceil((dueDate.getTime() - currentDate.getTime()) / (1000 * 3600 * 24));
+
+    if (diff > 0) {
+      return { text: `${diff} days left`, type: 'left' };
+    } else if (diff === 0) {
+      return { text: `Last day`, type: 'last' };
+    } else {
+      return { text: `${Math.abs(diff)} days delayed`, type: 'delayed' };
+    }
+  }
 }
