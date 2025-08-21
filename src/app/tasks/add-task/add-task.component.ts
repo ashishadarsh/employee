@@ -167,6 +167,10 @@ export class AddTaskComponent implements OnInit {
 
     if (this.task) {
       formData._id = this.task._id;
+      formData.pinned = this.task.pinned; // Preserve pinned state if editing
+      formData.priority = this.task.priority; // Preserve priority if editing
+      formData.backlog = this.task.backlog; // Preserve backlog state if editing
+      formData.assignedDate = this.task.assignedDate; // Preserve assigned date if editing
     }
 
     this.dataService.createTask(formData).subscribe(
