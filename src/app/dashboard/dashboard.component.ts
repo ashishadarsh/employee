@@ -11,6 +11,8 @@ import {
 } from 'ng-apexcharts';
 import { DataService } from '../data.service';
 
+const STATUS_CATEGORIES = ['To Do', 'Analyse', 'Development', 'QA', 'Done'];
+
 @Component({
   selector: 'app-dashboard',
   standalone: true,
@@ -64,7 +66,7 @@ export class DashboardComponent implements OnInit {
     this.pieChartOptions = {
       series: [],
       chart: { type: 'pie', height: 300 },
-      labels: [],
+      labels: STATUS_CATEGORIES,
       responsive: [{ breakpoint: 480, options: { chart: { width: 300 }, legend: { position: 'bottom' } } }]
     };
 
@@ -72,7 +74,7 @@ export class DashboardComponent implements OnInit {
     this.donutChartOptions = {
       series: [],
       chart: { type: 'donut', height: 300 },
-      labels: [],
+      labels: STATUS_CATEGORIES,
       responsive: [{ breakpoint: 480, options: { chart: { width: 300 }, legend: { position: 'bottom' } } }]
     };
 
@@ -89,7 +91,7 @@ export class DashboardComponent implements OnInit {
           }
         }
       },
-      labels: ['Completed', 'Pending', 'In Progress']
+      labels: STATUS_CATEGORIES
     };
 
     // Line Chart
@@ -118,11 +120,7 @@ export class DashboardComponent implements OnInit {
 
     // Stacked Bar
     this.stackedBarOptions = {
-      series: [
-        { name: 'Completed', data: [] },
-        { name: 'Pending', data: [] },
-        { name: 'In Progress', data: [] }
-      ],
+      series: STATUS_CATEGORIES.map(cat => ({ name: cat, data: [] })),
       chart: { type: 'bar', height: 300, stacked: true },
       xaxis: { categories: [] },
       plotOptions: { bar: { horizontal: false } }
@@ -132,7 +130,7 @@ export class DashboardComponent implements OnInit {
     this.radarChartOptions = {
       series: [{ name: 'Tasks', data: [] }],
       chart: { type: 'radar', height: 300 },
-      labels: ['Design', 'Development', 'QA', 'Testing']
+      labels: STATUS_CATEGORIES
     };
   }
 
@@ -148,20 +146,22 @@ export class DashboardComponent implements OnInit {
       this.analyseTasks = tasks.filter(t => t.status === 'Analyse').length;
       this.qaTasks = tasks.filter(t => t.status === 'QA').length;
 
-      // Pie / Donut / Radial
-      const grouped = this.groupTasksByStatus(tasks);
-      const statusLabels = Object.keys(grouped);
-      const statusValues = Object.values(grouped);
+      // Grouped counts by status in fixed order
+      const groupedCounts = STATUS_CATEGORIES.map(
+        status => tasks.filter(t => t.status === status).length
+      );
 
-      this.pieSeries = statusValues;
-      this.pieChartOptions.series = this.pieSeries;
-      this.pieChartOptions.labels = statusLabels;
+      // Pie / Donut
+      this.pieSeries = groupedCounts;
+      this.pieChartOptions.series = groupedCounts;
 
-      this.donutSeries = statusValues;
-      this.donutChartOptions.series = this.donutSeries;
-      this.donutChartOptions.labels = statusLabels;
+      this.donutSeries = groupedCounts;
+      this.donutChartOptions.series = groupedCounts;
 
-      this.radialSeries = statusValues;
+      // Radial (percentages)
+      this.radialSeries = groupedCounts.map(v =>
+        this.totalTasks ? Math.round((v / this.totalTasks) * 100) : 0
+      );
       this.radialChartOptions.series = this.radialSeries;
 
       // Line Chart (tasks over time)
@@ -188,29 +188,15 @@ export class DashboardComponent implements OnInit {
 
       // Stacked Bar (status per employee)
       const employees = [...new Set(tasks.map(t => t.assignedTo))];
-      const completedData = employees.map(e => tasks.filter(t => t.assignedTo === e && t.status === 'Done').length);
-      const toDoData = employees.map(e => tasks.filter(t => t.assignedTo === e && t.status === 'To Do').length);
-      const analyseData = employees.map(e => tasks.filter(t => t.assignedTo === e && t.status === 'Analyse').length);
-      const developmentData = employees.map(e => tasks.filter(t => t.assignedTo === e && t.status === 'Development').length);
-      const qaData = employees.map(e => tasks.filter(t => t.assignedTo === e && t.status === 'QA').length);
-
-      this.stackedBarOptions.series = [
-        { name: 'Completed', data: completedData },
-        { name: 'To Do', data: toDoData },
-        { name: 'Analyse', data: analyseData },
-        { name: 'Development', data: developmentData },
-        { name: 'QA', data: qaData }
-      ];
+      this.stackedBarOptions.series = STATUS_CATEGORIES.map(status => ({
+        name: status,
+        data: employees.map(e => tasks.filter(t => t.assignedTo === e && t.status === status).length)
+      }));
       this.stackedBarOptions.xaxis.categories = employees;
 
-      // Radar Chart (dummy example per task type)
-      const radarData = [completedData.reduce((a,b)=>a+b,0), toDoData.reduce((a,b)=>a+b,0), analyseData.reduce((a,b)=>a+b,0), developmentData.reduce((a,b)=>a+b,0),qaData.reduce((a,b)=>a+b,0),5];
-      this.radarChartOptions.series = [{ name: 'Tasks', data: radarData }];
+      // Radar Chart (overall category totals)
+      this.radarChartOptions.series = [{ name: 'Tasks', data: groupedCounts }];
     });
-  }
-
-  private groupTasksByStatus(tasks: any[]): Record<string, number> {
-    return tasks.reduce((acc, t) => { acc[t.status] = (acc[t.status] || 0) + 1; return acc; }, {} as Record<string, number>);
   }
 
   private groupTasksByDate(tasks: any[]): Record<string, number> {
@@ -222,6 +208,9 @@ export class DashboardComponent implements OnInit {
   }
 
   private groupTasksByEmployee(tasks: any[]): Record<string, number> {
-    return tasks.reduce((acc, t) => { acc[t.assignedTo] = (acc[t.assignedTo] || 0) + 1; return acc; }, {} as Record<string, number>);
+    return tasks.reduce((acc, t) => {
+      acc[t.assignedTo] = (acc[t.assignedTo] || 0) + 1;
+      return acc;
+    }, {} as Record<string, number>);
   }
 }
