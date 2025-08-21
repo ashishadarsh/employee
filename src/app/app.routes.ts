@@ -5,7 +5,7 @@ import { AuthComponent } from './auth/auth.component';
 import { AuthGuard } from './auth/auth.guard';
 import { BrandingComponent } from './branding/branding.component';
 import {routes as userRoutes} from './tasks/tasks.routes';
-import { routes as chatRoutes } from './chat/chat.routes';
+import { routes as taskRoutes } from './chat/chat.routes';
 import { ProfileComponent } from './profile/profile.component';
 import { resolveUserName } from './app.component';
 import { ChatListComponent } from './chat/chat-list/chat-list.component';
@@ -31,7 +31,7 @@ export const routes: Routes = [
     component: TasksComponent,
     canActivate: [AuthGuard],
     children: userRoutes,
-    title: 'Tasks'
+    title: 'Active Tasks'
   },
   { path: 'dashboard', loadComponent: () => import('./dashboard/dashboard.component').then(mod => mod.DashboardComponent), canActivate: [AuthGuard], title: 'Dashboard' },
   //{ path: 'chat', loadComponent: () => import('./chat/chat-all/chat-all.component').then(mod => mod.ChatAllComponent), canActivate: [AuthGuard], title: 'Team Chat' },
@@ -40,7 +40,7 @@ export const routes: Routes = [
     component: ChatListComponent,
     canActivate: [AuthGuard],
     title: 'Chat',
-    children: chatRoutes
+    children: taskRoutes
   },
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard], title: 'Team' , children: [
     { path: 'chat/user/:id/:name', loadComponent: () => import('./chat/chat/chat.component').then(mod => mod.ChatComponent), canActivate: [AuthGuard], title: resolveUserName },

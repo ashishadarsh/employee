@@ -31,7 +31,7 @@
         </div>
         <div class="profile-item">
           <span>Date of Birth:</span>
-          <span>{{ emp.dob }}</span>
+          <span>{{ emp.dob | date: 'dd MMM YYYY' }}</span>
         </div>
         <div class="profile-item">
           <span>Gender:</span>
@@ -77,7 +77,7 @@
       <div class="col-role">{{ item.designation }}</div>
       <div class="col-email">{{ item.email }}</div>
       <div class="col-phone">{{ item.mobileNo }}</div>
-      <div class="col-dob">{{ item.dob }}</div>
+      <div class="col-dob">{{ item.dob | date: 'longDate' }}</div>
       <div class="col-gender">{{ item.gender }}</div>
     </div>
   </div>
