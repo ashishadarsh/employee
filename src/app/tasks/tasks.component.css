@@ -131,6 +131,7 @@ p-iconfield {
   font-size: 0.875rem;
   transition: border 0.2s, box-shadow 0.2s;
   cursor: pointer;
+  width: 15%;
 }
 
 .status-filter select:focus {
@@ -183,4 +184,37 @@ p-iconfield {
   color: red;
   text-shadow: 0 0 0 red;
 }
+
+
+.badge {
+  top: -0.25rem;  /* moves badge above text */
+  right: -0.6rem; /* moves badge to the right corner */
+  /* background-color: #ff3b3b; */
+  color: white;
+  font-size: 0.65rem;
+  font-weight: bold;
+  padding: 0.15rem 0.4rem;
+  border-radius: 9999px; /* perfectly round pill */
+  line-height: 1;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  min-width: 1rem; /* keeps badge round when 1 digit */
+  text-align: center;
+}
+
+.badge-success{
+  background-color: #1e7e34;
+}
+
+.badge-warning {
+  background-color: #ffc107;
+}
+
+.badge-danger {
+  background-color: #dc3545;
+}
+
+/* .chat-link a:hover .badge {
+  background-color: #e60000;
+  transition: background-color 0.2s ease;
+} */
 

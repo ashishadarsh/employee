@@ -25,6 +25,7 @@ export const routes: Routes = [
   { path: '', component: BrandingComponent, title: 'Assigniq' },
   { path: 'auth', component: AuthComponent, title: 'Authentication' },
   { path: 'tasks/history/:archive', component: TasksComponent, canActivate: [AuthGuard], title: ' Completed Tasks' },
+  { path: 'tasks/backlog', component: TasksComponent, canActivate: [AuthGuard], title: ' Backlog Tasks' },
   {
     path: 'tasks',
     component: TasksComponent,

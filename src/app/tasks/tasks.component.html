@@ -41,14 +41,24 @@
 
     <!-- Centered Tabs -->
     <div class="custom-tabview-wrapper">
-      <p-tabView
+      <!-- <p-tabView
         [activeIndex]="archive() ? 1 : 0"
         (onChange)="onTabChange($event)"
         class="custom-tabview"
       >
         <p-tabPanel header="Active Tasks"></p-tabPanel>
         <p-tabPanel header="Archived Tasks"></p-tabPanel>
+      </p-tabView> -->
+      <p-tabView
+        [activeIndex]="activeIndex"
+        (onChange)="onTabChange($event)"
+        class="custom-tabview"
+      >
+        <p-tabPanel header="Active Tasks"></p-tabPanel>
+        <p-tabPanel header="Archived Tasks"></p-tabPanel>
+        <p-tabPanel header="Backlog Tasks"></p-tabPanel>
       </p-tabView>
+
     </div>
 
     <div class="status-filter">
@@ -127,13 +137,23 @@
               </i>
               </div>
              <div [routerLink]="['/tasks', task._id]"
-             (click)="$event.stopPropagation()" style="flex: 1;">
-              <a
-              style="cursor: pointer; text-decoration: none; color: forestgreen; font: caption;"
-              [title]="task.originalTitle || task.title"
-            >
-              {{ task.title }}
-            </a>
+              (click)="$event.stopPropagation()" style="flex: 1;">
+                <a
+                style="cursor: pointer; text-decoration: none; color: forestgreen; font: caption;"
+                [title]="task.originalTitle || task.title"
+              >
+                {{ task.title }}
+
+               </a>
+              <span *ngIf="task.status !== 'Done'"
+                class="badge"
+                [ngClass]="{
+                  'badge-success': getTaskStatus(task._id)?.type === 'left',
+                  'badge-warning': getTaskStatus(task._id)?.type === 'last',
+                  'badge-danger': getTaskStatus(task._id)?.type === 'delayed'
+                }">
+                {{ getTaskStatus(task._id)?.text }}
+              </span>
              </div>
 
           </div>
