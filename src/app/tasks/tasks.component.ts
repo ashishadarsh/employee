@@ -151,6 +151,10 @@ export class TasksComponent implements OnInit {
         label: task.backlog ? 'Move to Active' : 'Move to Backlog',
         icon: task.backlog ? 'pi pi-check-circle' : 'pi pi-arrow-left',
         command: () => {
+          task.status = task.status.map(s => {
+            const { __typename, ...rest } = s; // destructuring to remove taskName
+            return rest;
+          });
           this.dataService.createTask({ ...task, backlog: !task.backlog }).subscribe({
             next: () => {
               task.backlog = !task.backlog; // flip backlog
@@ -191,10 +195,10 @@ export class TasksComponent implements OnInit {
 
           if (tabIndex === 0) {
             // Active → status not Done and not backlog
-            filteredTasks = tasks.filter(task => task.status !== 'Done' && !task.backlog);
+            filteredTasks = tasks.filter(task => task.status[task.status.length - 1].value !== 'Done' && !task.backlog);
           } else if (tabIndex === 1) {
             // Archived → status Done
-            filteredTasks = tasks.filter(task => task.status === 'Done');
+            filteredTasks = tasks.filter(task => task.status[task.status.length - 1].value === 'Done' && !task.backlog);
           } else if (tabIndex === 2) {
             // Backlog → backlog true
             filteredTasks = tasks.filter(task => task.backlog);
@@ -218,6 +222,10 @@ export class TasksComponent implements OnInit {
 
 
   togglePriority(task, event) {
+    task.status = task.status.map(s => {
+      const { __typename, ...rest } = s; // destructuring to remove taskName
+      return rest;
+    });
    this.dataService.createTask({ ...task, priority: !task.priority }).subscribe({
       next: () => {
         task.priority = !task.priority;
@@ -230,6 +238,11 @@ export class TasksComponent implements OnInit {
   }
 
   togglePin(task, event) {
+    // remove field __typename from all objects of status array
+    task.status = task.status.map(s => {
+      const { __typename, ...rest } = s; // destructuring to remove taskName
+      return rest;
+    });
     this.dataService.createTask({...task, pinned: !task.pinned}).subscribe({
       next: () => {
         task.pinned = !task.pinned;
@@ -330,7 +343,7 @@ get filteredTasks() {
 
 
   getTaskStatus(taskId: string) {
-    const task = this.tasks.find(t => t._id === taskId && t.status !== 'Done');
+    const task = this.tasks.find(t => t._id === taskId && t.status[t.status.length - 1].value !== 'Done');
     if (!task) return null;
 
     const currentDate = new Date();

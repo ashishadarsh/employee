@@ -74,7 +74,9 @@ export class AddTaskComponent implements OnInit {
     { value: '1', label: 'HotFix' },
     { value: '2', label: 'Feature' },
     { value: '3', label: 'Research' },
-    { value: '4', label: 'Update' }
+    { value: '4', label: 'Update' },
+    { value: '5', label: 'Study' },
+    { value: '6', label: 'Revision' }
   ];
 
   private dataService = inject(DataService);
@@ -146,7 +148,7 @@ export class AddTaskComponent implements OnInit {
         validators: [Validators.required, Validators.minLength(5)],
         updateOn: 'change'
       }),
-      status: new FormControl(this.task?.status || '', Validators.required),
+      status: new FormControl(this.task?.status.length? this.task.status[this.task.status.length - 1].value : '', Validators.required),
       type: new FormControl(this.task?.type || '', Validators.required),
       empId: new FormControl(
         { value: this.task?.empId ? this.task.empId: this.emp._id, disabled: this.edit },
@@ -172,6 +174,8 @@ export class AddTaskComponent implements OnInit {
       formData.backlog = this.task.backlog; // Preserve backlog state if editing
       formData.assignedDate = this.task.assignedDate; // Preserve assigned date if editing
     }
+
+    formData.status = {value: formData.status, updatedAt: new Date()};
 
     this.dataService.createTask(formData).subscribe(
       response => {

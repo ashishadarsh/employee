@@ -145,7 +145,7 @@
                 {{ task.title }}
 
                </a>
-              <span *ngIf="task.status !== 'Done'"
+              <span *ngIf="task.status[task.status.length - 1].value !== 'Done'"
                 class="badge"
                 [ngClass]="{
                   'badge-success': getTaskStatus(task._id)?.type === 'left',
@@ -182,7 +182,7 @@
             <p-tag [value]="task.type" [severity]="getSeverityType(task.type)" />
         </td>
             <td>
-              <p-tag [value]="task.status" [severity]="getSeverity(task.status)" />
+              <p-tag [value]="task.status[task.status.length - 1].value" [severity]="getSeverity(task.status[task.status.length - 1].value)" />
           </td>
             <td>
                 {{ task.completionDate }}
