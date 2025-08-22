@@ -140,6 +140,7 @@ export async function getEmployeeTasks(empId) {
         pinned
         priority
         backlog
+        tags
       }
     }
   `;
@@ -193,14 +194,13 @@ export async function getEmployeesByTeam(team) {
   return data.getEmployeesByTeam;
 }
 
-export async function createNewTask({_id, title, description, empId, completionDate, status, type, priority, pinned, backlog}) {
-  console.log("status:", status);
-
+export async function createNewTask({_id, title, description, empId, completionDate, status, type, priority, pinned, backlog, tags}) {
   const mutation = gql`
     mutation createTask($input: createTaskInput!) {
       createTaskForEmployee(input: $input) {
         title
         description
+        tags
         assignedDate
         status{
           value
@@ -224,7 +224,8 @@ export async function createNewTask({_id, title, description, empId, completionD
     type,
     priority,
     pinned,
-    backlog
+    backlog,
+    tags
   } },
   });
   return data.createTaskForEmployee;

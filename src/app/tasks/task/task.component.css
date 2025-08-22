@@ -39,7 +39,6 @@
 }
 
 .card {
-  margin: 0 1rem;
   padding-left: 20px;
   padding-right: 20px;
   background: linear-gradient(180deg, #dfe9ea 0%, #a4abb3 100%);
@@ -117,6 +116,10 @@
   scrollbar-gutter: stable; /* keeps layout from shifting */
 }
 
+.task-body-modern.tags {
+  margin-bottom: 0;
+}
+
 /* Fixed Actions */
 .task-actions-modern.fixed-actions {
   flex: 0 0 auto;
@@ -126,4 +129,9 @@
   padding-top: 10px;
   /* border-top: 1px solid #eee; */
   background: #fff;
+}
+
+.tag-item{
+  margin-right: 10px;
+  margin-bottom: 10px;
 }

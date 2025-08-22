@@ -1,5 +1,5 @@
 import { Component, DestroyRef, inject, input, OnInit } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { DataService } from '../../data.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -30,7 +30,7 @@ export function forbiddenTitle(control: AbstractControl) {
 
 @Component({
   selector: 'app-add-task',
-  imports: [ReactiveFormsModule, CommonModule, NgxEditorModule, Button],
+  imports: [ReactiveFormsModule, CommonModule, NgxEditorModule, Button, FormsModule],
   templateUrl: './add-task.component.html',
   styleUrls: ['./add-task.component.css'],
   providers: [provideNativeDateAdapter()]
@@ -47,7 +47,7 @@ export class AddTaskComponent implements OnInit {
   public teamData: any;
   public addTaskForm!: FormGroup;
   public edit = false;
-  //editordoc = jsonDoc;
+  public tagInput: string = '';
 
   editor!: Editor;
   toolbar: Toolbar = [
@@ -154,9 +154,38 @@ export class AddTaskComponent implements OnInit {
         { value: this.task?.empId ? this.task.empId: this.emp._id, disabled: this.edit },
         Validators.required
       ),
-      completionDate: new FormControl(this.task?.completionDate || null, Validators.required)
+      completionDate: new FormControl(this.task?.completionDate || null, Validators.required),
+      tags: new FormControl(this.task?.tags || [])
     });
   }
+
+  addTag(event?: KeyboardEvent | Event) {
+    if (event) {
+      event.preventDefault?.(); // optional chaining for Event
+    }
+
+    const value = this.tagInput.trim();
+    if (!value) return;
+
+    const tagsControl = this.addTaskForm.get('tags')!;
+    const tags = [...tagsControl.value]; // copy the current array
+
+    if (!tags.includes(value)) {
+      tags.push(value);
+      tagsControl.setValue(tags); // update the FormControl
+    }
+
+    this.tagInput = '';
+  }
+
+
+  removeTag(index: number) {
+    const tagsControl = this.addTaskForm.get('tags')!;
+    const tags = [...tagsControl.value];
+    tags.splice(index, 1);
+    tagsControl.setValue(tags);
+  }
+
 
   closePopup() {
     this.router.navigate(['/tasks']);

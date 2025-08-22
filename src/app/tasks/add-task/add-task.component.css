@@ -33,7 +33,7 @@
 
 /* Floating Inputs */
 .form-floating {
-  margin-bottom: 1rem;
+  /* margin-bottom: 1rem; */
 }
 
 .form-control {
@@ -183,6 +183,7 @@ input[type="date"]:focus {
   display: flex;
   flex-direction: column;
   height: 100%;
+  overflow-y: auto;
 }
 /* Fixed buttons at bottom */
 .fixed-buttons {
@@ -205,4 +206,45 @@ span {
 
 .taskFormButton {
   flex: 1
+}
+
+.tags {
+  font-weight: 500;
+  padding-bottom: 0.35rem;
+}
+
+.tags-input-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  padding: 0.4rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  min-height: 40px;
+  align-items: center;
+  cursor: text;
+}
+
+.tags-input-wrapper input {
+  border: none;
+  outline: none;
+  flex: 1;
+  min-width: 120px;
+  padding: 0.3rem;
+}
+
+.tag {
+  background-color: #a0aebe;
+  color: white;
+  padding: 0.3rem 0.6rem;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  font-size: 0.85rem;
+}
+
+.tag-close {
+  margin-left: 0.4rem;
+  cursor: pointer;
+  font-weight: bold;
 }
