@@ -286,24 +286,26 @@ export class TasksComponent implements OnInit {
 }
 
 
-getSeverityType(status: string) {
-  switch (status) {
-      case 'HotFix':
-          return 'danger';
-
-      case 'Research':
-          return 'info';
-
-      case 'Feature':
-          return 'success';
-
-      case 'BugFix':
-          return 'warn';
-
-      case 'Update':
-          return 'warn';
-      default:
-          return 'contrast';
+getSeverityType(type: string) {
+  switch (type) {
+    case 'HotFix':
+      return 'danger';
+    case 'Research':
+      return 'success';
+    case 'Feature':
+      return 'info';
+    case 'BugFix':
+      return 'warn';
+    case 'Update':
+      return 'secondary';
+    case 'Study':
+      return 'primary';
+    case 'Revision':
+      return 'secondary';
+    case 'Documentation':
+      return 'light';
+    default:
+      return null;
   }
 }
 

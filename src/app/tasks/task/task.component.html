@@ -26,6 +26,13 @@
   </div>
   </div>
 
+  <div class="task-body-modern tags" *ngIf="task.tags && task.tags.length !== 0">
+    <h4>Tags</h4>
+    <!-- <div *ngFor="let tags of task.tags" class="tags"> -->
+      <p-tag *ngFor="let tags of task.tags" [value]="tags" class="tag-item"></p-tag>
+    <!-- </div> -->
+  </div>
+
   <!-- Meta Info -->
   <div class="task-meta-modern">
     <div class="meta-item">
