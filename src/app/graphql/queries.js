@@ -131,7 +131,10 @@ export async function getEmployeeTasks(empId) {
         assignedDate
         completionDate
         empId
-        status
+        status {
+          value
+          updatedAt
+        }
         assigneeId
         title
         description
@@ -193,13 +196,18 @@ export async function getEmployeesByTeam(team) {
 }
 
 export async function createNewTask({_id, title, description, empId, completionDate, status, type, priority, pinned, backlog}) {
+  console.log("status:", status);
+
   const mutation = gql`
     mutation createTask($input: createTaskInput!) {
       createTaskForEmployee(input: $input) {
         title
         description
         assignedDate
-        status
+        status{
+          value
+          updatedAt
+        }
         empId
         type
       }

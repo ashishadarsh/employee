@@ -33,6 +33,22 @@
   margin: 1rem 0 ;
 }
 
+.task-timeline {
+  width: 100%;
+  margin: 1rem 0;
+}
+
+.card {
+  margin: 0 1rem;
+  padding-left: 20px;
+  padding-right: 20px;
+  background: linear-gradient(180deg, #dfe9ea 0%, #a4abb3 100%);
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(2,6,23,0.06);
+  transition: transform .18s ease, box-shadow .18s ease;
+
+}
+
 .type {
   margin-right: 10px;
 }

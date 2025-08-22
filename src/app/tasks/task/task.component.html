@@ -10,7 +10,20 @@
 
   <div class="task-badges">
     <p-tag [value]="task.type" [severity]="getSeverityType(task.type)" class="type"></p-tag>
-    <p-tag [value]="task.status" [severity]="getSeverity(task.status)"></p-tag>
+    <p-tag [value]="task.status[task.status.length - 1].value" [severity]="getSeverity(task.status[task.status.length - 1].value)"></p-tag>
+  </div>
+
+  <div class="task-timeline" *ngIf="events.length > 1">
+    <div class="card">
+      <p-timeline [value]="events" layout="horizontal" align="top">
+           <ng-template #content let-event>
+              <small class="text-surface-500 dark:text-surface-400">{{ event.date | date: "shortDate" }}</small>
+          </ng-template>
+          <ng-template #opposite let-event>
+              {{ event.status }}
+          </ng-template>
+      </p-timeline>
+  </div>
   </div>
 
   <!-- Meta Info -->

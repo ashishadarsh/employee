@@ -5,10 +5,16 @@ import { ActivatedRouteSnapshot, ResolveFn, RouterModule } from '@angular/router
 import { Tag } from 'primeng/tag';
 import { Button } from 'primeng/button';
 import { NgxEditorModule } from 'ngx-editor';
+import { Timeline } from 'primeng/timeline';
+
+interface EventItem {
+  value?: string;
+  updayedAt?: string;
+}
 
 @Component({
   selector: 'app-task',
-  imports: [CommonModule, RouterModule, Tag, Button, NgxEditorModule],
+  imports: [CommonModule, RouterModule, Tag, Button, NgxEditorModule, Timeline],
   templateUrl: './task.component.html',
   styleUrl: './task.component.css'
 })
@@ -22,12 +28,37 @@ export class TaskComponent implements OnInit{
   public loading: boolean = true;
   public error: string = '';
   private dataService = inject(DataService);
+  events!: EventItem[];
+
+  constructor() {
+  //   this.events = [
+  //     { status: 'Ordered', date: '15/10/2020 10:30', icon: 'pi pi-shopping-cart', color: '#9C27B0', image: 'game-controller.jpg' },
+  //     { status: 'Processing', date: '15/10/2020 14:00', icon: 'pi pi-cog', color: '#673AB7' },
+  //     { status: 'Shipped', date: '15/10/2020 16:15', icon: 'pi pi-shopping-cart', color: '#FF9800' },
+  //     { status: 'Delivered', date: '16/10/2020 10:00', icon: 'pi pi-check', color: '#607D8B' }
+  // ];
+  // this.events = this.task.map(t => {
+  //   return {
+  //     value: t.status,
+  //     updayedAt: t.updatedAt,
+  //     icon: 'pi pi-check',
+  //     // color: this.getSeverity(t.status),
+  //     // image: t.assigneeId ? `https://ui-avatars.com/api/?name=${t.assigneeId}&background=random` : ''
+  //   }
+  // })
+  }
 
   ngOnInit(): void {
     this.fetchTasks();
     // this.task = this.tasks?.find((task: any) => task._id === this.taskId());
     this.assigneeId = this.task?.assigneeId || '';
     this.fetchEmployeeName(this.assigneeId);
+
+    this.events = this.task.status.map(s => ({
+      status: s.value,
+      date: s.updatedAt,
+    }));
+
   }
 
   fetchTasks() {
