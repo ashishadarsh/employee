@@ -1,4 +1,4 @@
-import { Component, input, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, input, OnInit, ViewChild } from '@angular/core';
 import { DataService } from '../data.service';
 import { ActivatedRoute, NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -12,12 +12,20 @@ import { InputIcon } from 'primeng/inputicon';
 import { Tag } from 'primeng/tag';
 import { MenuModule } from 'primeng/menu';
 import { TabViewModule } from 'primeng/tabview';
+import { TooltipModule } from 'primeng/tooltip';
+
+interface StickyNote {
+  text: string;
+  x: number;
+  y: number;
+  color: string;
+}
 
 
 @Component({
   selector: 'app-tasks',
   standalone: true,
-  imports: [RouterLink, CommonModule, RouterOutlet, FormsModule, TableModule, InputTextModule, IconField, InputIcon, Tag, Button, MenuModule, TabViewModule],
+  imports: [RouterLink, CommonModule, RouterOutlet, FormsModule, TableModule, InputTextModule, IconField, InputIcon, Tag, Button, MenuModule, TabViewModule, TooltipModule],
   templateUrl: './tasks.component.html',
   styleUrls: ['./tasks.component.css']
 })
@@ -32,6 +40,14 @@ export class TasksComponent implements OnInit {
   public searchTerm: string = '';
   public taskItems: any[] = [];
   public activeIndex: number = 0;
+  visible: boolean = false;
+
+  notes: StickyNote[] = [];
+
+  draggingNoteIndex: number | null = null;
+  offsetX = 0;
+  offsetY = 0;
+
 
   @ViewChild('taskMenu') taskMenu: any;
   // items: MenuItem[];
@@ -59,6 +75,52 @@ export class TasksComponent implements OnInit {
     }
 
     this.fetchTasks(this.activeIndex);
+    const saved = localStorage.getItem('stickyNotes');
+    if (saved) {
+      this.notes = JSON.parse(saved);
+    }
+  }
+
+  addNote() {
+    const colors = ['#FFEB3B', '#FFCDD2', '#C8E6C9', '#BBDEFB', '#FFF9C4'];
+    const newNote: StickyNote = {
+      text: '',
+      x: 50,
+      y: 50,
+      color: colors[Math.floor(Math.random() * colors.length)]
+    };
+    this.notes.push(newNote);
+    this.saveNotes();
+  }
+
+  deleteNote(index: number) {
+    this.notes.splice(index, 1);
+    this.saveNotes();
+  }
+
+  startDrag(event: MouseEvent, index: number) {
+    this.draggingNoteIndex = index;
+    this.offsetX = event.clientX - this.notes[index].x;
+    this.offsetY = event.clientY - this.notes[index].y;
+  }
+
+  @HostListener('document:mousemove', ['$event'])
+  onMouseMove(event: MouseEvent) {
+    if (this.draggingNoteIndex !== null) {
+      const note = this.notes[this.draggingNoteIndex];
+      note.x = event.clientX - this.offsetX;
+      note.y = event.clientY - this.offsetY;
+      this.saveNotes();
+    }
+  }
+
+  @HostListener('document:mouseup')
+  onMouseUp() {
+    this.draggingNoteIndex = null;
+  }
+
+  saveNotes() {
+    localStorage.setItem('stickyNotes', JSON.stringify(this.notes));
   }
 
 
@@ -207,7 +269,7 @@ export class TasksComponent implements OnInit {
           this.tasks = filteredTasks.map(task => ({
             ...task,
             originalTitle: task.title,
-            title: this.truncateString(task.title)
+            title: this.truncateString(task.title),
           }));
           this.statusOptions = [...new Set(this.tasks.map(t => t.status))];
           this.loading = false;
