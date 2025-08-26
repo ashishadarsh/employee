@@ -5,7 +5,8 @@
   left: 0;
   right: 0;
   height: 60px; /* or your desired height */
-  background: linear-gradient(90deg, #c0a9c7, #d6c2d9);
+  /* background: linear-gradient(90deg, #bee0b1, #329613); */
+  background: linear-gradient(90deg, #84c86b, #84c86b);
   z-index: 1000;
   display: flex;
   align-items: center;

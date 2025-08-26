@@ -30,7 +30,7 @@
 .avatar {
   width: 70px;
   height: 70px;
-  background: linear-gradient(135deg, #4f46e5, #9333ea);
+  background: linear-gradient(135deg, #30a43c, #048e3a);
   color: white;
   border-radius: 50%;
   font-size: 1.5rem;
@@ -138,7 +138,7 @@
 }
 
 .team-row.header {
-  background: linear-gradient(135deg, #4f46e5, #9333ea);
+  background: linear-gradient(135deg, #30a43c, #048e3a);
   color: white;
   font-weight: bold;
 }
@@ -152,7 +152,7 @@
 .avatar-small {
   width: 35px;
   height: 35px;
-  background: linear-gradient(135deg, #4f46e5, #9333ea);
+  background: linear-gradient(135deg, #30a43c, #048e3a);
   color: white;
   font-weight: bold;
   font-size: 0.9rem;

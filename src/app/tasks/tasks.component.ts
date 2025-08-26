@@ -236,7 +236,7 @@ export class TasksComponent implements OnInit {
         command: () => this.dataService.deleteTask(task._id).subscribe({
           next: () => {
             this.tasks = this.tasks.filter(t => t._id !== task._id);
-            this.statusOptions = [...new Set(this.tasks.map(t => t.status))];
+            this.statusOptions = [...new Set(this.tasks.map(t => t.status[t.status.length - 1].value))];
           },
           error: () => {
             this.error = 'Failed to delete task.';
@@ -271,7 +271,7 @@ export class TasksComponent implements OnInit {
             originalTitle: task.title,
             title: this.truncateString(task.title),
           }));
-          this.statusOptions = [...new Set(this.tasks.map(t => t.status))];
+          this.statusOptions = [...new Set(this.tasks.map(t => t.status[t.status.length - 1].value))];
           this.loading = false;
         },
         error => {
@@ -374,7 +374,7 @@ getSeverityType(type: string) {
 
 get filteredTasks() {
   const tasksFilteredByStatus = this.selectedStatus
-    ? this.tasks.filter(task => task.status === this.selectedStatus)
+    ? this.tasks.filter(task => task.status[task.status.length - 1].value === this.selectedStatus)
     : this.tasks;
 
   if (!this.searchTerm) return tasksFilteredByStatus;
